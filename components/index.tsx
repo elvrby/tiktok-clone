@@ -95,7 +95,7 @@ const Index: React.FC = () =>{
                     </div>
 
                     <div className="w-full mt-5">
-                    <button type="button" className="w-full text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">Log In</button>
+                        <button type="button" className="w-full text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">Log In</button>
                     </div>
                 </div>
 
@@ -121,7 +121,7 @@ const Index: React.FC = () =>{
 
             </div>
 
-            <div className="w-full">
+            <div className="w-full text-center">
                 <h1>main konten</h1>
             </div>
 
