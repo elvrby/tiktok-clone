@@ -31,7 +31,7 @@ const Header: React.FC = () => {
 
                     <div className="Menu-Header text-white flex justify-between w-32 h-auto">
                         <div className="flex items-center justify-center">
-                            <button type="button" className="w-24 rounded-lg text-sm px-5 py-2.5 text-center me-2  bg-red-700 border border-red-700 hover:bg-[#1E1E1E] hover:border-red-700">Log In</button>
+                            <button type="button" className="w-24 rounded-lg font-semibold text-sm px-5 py-2.5 text-center me-2  bg-red-700 border border-red-700 hover:bg-[#1E1E1E] hover:border-red-700">Log In</button>
                         </div>
                         <div className="flex items-center justify-center h-auto">
                             <svg width="5" height="26" viewBox="0 0 6 26" fill="none" xmlns="http://www.w3.org/2000/svg">

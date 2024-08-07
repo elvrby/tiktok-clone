@@ -3,10 +3,10 @@ import Image from "next/image";
 
 const Index: React.FC = () =>{
     return(
-        <main className="flex justify-between">
+        <main className="flex justify-between w-full h-[calc(100vh-4rem)]">
 
             {/*         Side Bar         */}
-            <div className="w-72 h-screen bg-[#1E1E1E] p-5">
+            <div className="w-72 h-full bg-[#1E1E1E] p-5">
                 {/*     Page Sidebar     */}
                 <div className="Pages-Sidebar block relative font-semibold ml-2">
                     <a href="#">
@@ -34,6 +34,7 @@ const Index: React.FC = () =>{
                             </div>
                             <div className="w-full flex items-center text-center ml-3">
                                 <h1 className="text-xl items-center justify-center">Explore</h1>
+                                <span className="text-sm w-14 rounded-xl bg-red-700 ml-2 hover:text-white text-white">New</span>
                             </div>
                         </div> 
                     </a>
@@ -121,8 +122,12 @@ const Index: React.FC = () =>{
 
             </div>
 
-            <div className="w-full text-center">
-                <h1>main konten</h1>
+            <div className="w-full text-center items-center justify-center flex ">
+                <div className="w-full items-center justify-center flex p-1 h-[calc(100vh-10rem)]">
+                    <div className="w-[calc(100vh-32rem)] h-full bg-[#4A4A4A] rounded-xl">
+                        <h1>Main</h1>
+                    </div>
+                </div>
             </div>
 
         </main>
