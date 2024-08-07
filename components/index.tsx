@@ -190,7 +190,7 @@ const Index: React.FC = () =>{
             </div>
 
             {/*     Main Konten     */}
-            <div className="w-full text-center items-center justify-center block">
+            <div className="w-full text-center items-center justify-center flex">
                 <div className="w-full items-center justify-center flex p-1 h-[calc(100vh-10rem)]">
                     <div className="w-[calc(100vh-32rem)] h-full bg-[#4A4A4A] rounded-xl">
                         <h1>Main</h1>
