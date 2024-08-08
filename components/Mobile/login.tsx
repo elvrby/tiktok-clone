@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface LoginComponentProps {
     close: () => void;
@@ -8,13 +9,18 @@ interface LoginComponentProps {
   const LoginComponent: React.FC<LoginComponentProps> = ({ close }) => {
   return (
     <div>
-        <Image src="/wall1.jpg" layout="fill" objectFit="cover" objectPosition="center" alt="" />
+        <Image src="/wall1.jpg" layout="fill" objectFit="cover" objectPosition="center" alt="" className="md:hidden"/>
     <div className="fixed inset-0 flex flex-col items-center justify-center p-4">
       <div className="bg-[#1E1E1E] rounded-tl-lg rounded-tr-lg shadow-lg w-full max-w-md p-6">
         <div className="w-full h-8 justify-end flex">
-            <button onClick={close} className="w-8 h-8 bg-[#4A4A4A] rounded-full">
+            <button onClick={close} className="w-8 h-8 bg-[#4A4A4A] rounded-full hidden md:block">
                 <h1>X</h1>
             </button>
+            <Link href="/" passHref>
+            <button className="w-8 h-8 bg-[#4A4A4A] rounded-full md:hidden">
+                <h1>X</h1>
+            </button>
+            </Link>
         </div>
         <div className="w-full items-center flex flex-col justify-center">
           <div>
