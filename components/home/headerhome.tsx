@@ -1,10 +1,8 @@
-import React from "react";
+  import React from "react";
 
-interface HeaderProps {
-    onLoginClick: () => void;
-  }
 
-  const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
+
+  const HeaderHome: React.FC = () => {
     return (
         <main>
             {/*         Desktop      */}
@@ -34,16 +32,31 @@ interface HeaderProps {
                         </div>
                     </div>
 
-                    <div className="Menu-Header text-white flex justify-end w-56 h-auto">
-                        <div className="flex items-center justify-center mr-4">
-                            <button type="button" onClick={onLoginClick} className="w-24 rounded-lg font-semibold text-sm px-5 py-2.5 text-center me-2  bg-red-700 border border-red-700 hover:bg-[#1E1E1E] hover:border-red-700">Log In</button>
+                    <div className="Menu-Header text-white flex justify-between w-56 h-auto">
+                        <div className="flex items-center ">
+                            <button type="button" className="w-24 h-10 flex items-center justify-center rounded-lg font-semibold text-sm bg-[#4A4A4A] border border-[#4A4A4A] hover:bg-red-700 hover:border-red-700">
+                                <svg className="w-4 h-5 mr-2" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9.61523 0H11.6152V20H9.61523V0Z" fill="#D9D9D9"/>
+                                    <path d="M21 9V11L0 11L8.74224e-08 9L21 9Z" fill="#D9D9D9"/>
+                                </svg>
+                                <span className="text-sm text-white">Upload</span>
+                            </button>
                         </div>
-                        <div className="flex items-center justify-center h-auto">
-                            <svg width="5" height="26" viewBox="0 0 6 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6 3C6 4.65685 4.65685 6 3 6C1.34315 6 0 4.65685 0 3C0 1.34315 1.34315 0 3 0C4.65685 0 6 1.34315 6 3Z" fill="white"/>
-                                <path d="M6 12.75C6 14.4069 4.65685 15.75 3 15.75C1.34315 15.75 0 14.4069 0 12.75C0 11.0931 1.34315 9.75 3 9.75C4.65685 9.75 6 11.0931 6 12.75Z" fill="white"/>
-                                <path d="M6 22.5C6 24.1569 4.65685 25.5 3 25.5C1.34315 25.5 0 24.1569 0 22.5C0 20.8431 1.34315 19.5 3 19.5C4.65685 19.5 6 20.8431 6 22.5Z" fill="white"/>
-                            </svg>
+
+                        <div className="w-full flex items-center justify-between h-auto pl-4">
+                            <div className="w-5">
+                                <svg className="w-full" viewBox="0 0 33 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M32.0363 0.637661C31.6587 0.319818 31.202 0.110994 30.715 0.0335929C30.228 -0.0438082 29.7291 0.013135 29.272 0.198313L1.37361 11.3895C0.966933 11.5588 0.619419 11.845 0.374946 12.2121C0.130473 12.5792 0 13.0106 0 13.452C0 13.8933 0.130473 14.3247 0.374946 14.6918C0.619419 15.0589 0.966933 15.3452 1.37361 15.5145L3.17587 16.2589C3.47302 16.3849 3.80791 16.3875 4.10701 16.2663C4.40611 16.145 4.64495 15.9097 4.7711 15.6121C4.83299 15.4639 4.86507 15.3049 4.86549 15.1442C4.86592 14.9836 4.83469 14.8244 4.7736 14.6759C4.7125 14.5273 4.62274 14.3923 4.50947 14.2787C4.3962 14.165 4.26164 14.0748 4.11352 14.0134L2.77401 13.4642L30.1853 2.48048C30.2274 2.45458 30.2759 2.44088 30.3253 2.44088C30.3748 2.44088 30.4232 2.45458 30.4654 2.48048C30.5051 2.5143 30.5351 2.55817 30.5523 2.60752C30.5694 2.65688 30.573 2.70993 30.5628 2.76117L25.5579 26.1686C25.5415 26.252 25.5036 26.3296 25.4481 26.3938C25.3926 26.4581 25.3213 26.5066 25.2413 26.5348C25.1628 26.566 25.0774 26.5757 24.9939 26.5628C24.9104 26.5499 24.8319 26.515 24.7664 26.4615L15.0245 18.8462L24.5594 9.19274C24.763 8.98095 24.8835 8.70256 24.8987 8.4088C24.9139 8.11505 24.8226 7.82569 24.6418 7.59399C24.461 7.36228 24.2028 7.20382 23.9147 7.14776C23.6265 7.0917 23.3279 7.14182 23.0737 7.2889L9.09407 15.5877C8.93881 15.658 8.79999 15.7602 8.68661 15.8877C8.57322 16.0151 8.48779 16.165 8.43583 16.3277C8.38388 16.4903 8.36656 16.6621 8.38499 16.8318C8.40342 17.0016 8.4572 17.1656 8.54284 17.3132C8.62848 17.4608 8.74408 17.5888 8.88217 17.6888C9.02026 17.7889 9.17776 17.8588 9.34448 17.894C9.51121 17.9292 9.68346 17.9289 9.85009 17.8933C10.0167 17.8576 10.174 17.7872 10.3118 17.6868L16.1935 14.2086L13.3318 17.1254C13.07 17.3719 12.8659 17.6734 12.734 18.0083C12.6022 18.3432 12.5458 18.7031 12.5691 19.0624C12.5924 19.4216 12.6947 19.7713 12.8687 20.0863C13.0426 20.4012 13.2839 20.6738 13.5754 20.8843L23.3173 28.3898C23.83 28.7864 24.4597 29.001 25.1073 29C25.4522 28.9975 25.7941 28.9356 26.1181 28.8169C26.5832 28.6496 26.9977 28.3653 27.3218 27.9913C27.6459 27.6174 27.8688 27.1663 27.969 26.6812L32.9374 3.29815C33.0429 2.81449 33.0147 2.31116 32.8559 1.84236C32.6971 1.37355 32.4137 0.957038 32.0363 0.637661Z" fill="white"/>
+                                </svg>
+                            </div>
+                            <div className="w-5">
+                                <svg className="w-full" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10.5672 24.3835L10.2707 24.0655H9.83583H1V1H27.9898L27.7583 23.8488L19.1242 24.1941L18.7287 24.2099L18.4512 24.4921L14.4564 28.5543L10.5672 24.3835ZM20.271 15.882H21.271V14.882V11.884V10.884H20.271H8.5985H7.5985V11.884V14.882V15.882H8.5985H20.271Z" stroke="white" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div className="w-8 h-8 rounded-full bg-[#4A4A4A]">
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -95,4 +108,4 @@ interface HeaderProps {
     );
 }
 
-export default Header;
+export default HeaderHome;

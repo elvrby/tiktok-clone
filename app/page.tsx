@@ -1,13 +1,18 @@
 "use client"
 import React, { useState } from "react";
 import Image from "next/image";
-import Header from "@/components/header"
-import Index from "@/components/index"
+import Header from "@/components/header";
+import Index from "@/components/index";
 import FooterMobile from "@/components/Mobile/footer";
 import LoginComponent from "@/components/Mobile/login";
+import { useUserSession } from '@/hooks/use-user-session';
 
 const Page: React.FC = () => {
   const [isLoginVisible, setLoginVisible] = useState(false);
+
+  // Assuming you might have a session value, you can set it here
+  const session = null; // Replace this with the actual session value if available
+  const userSessionId = useUserSession(session);
 
   const handleShowLogin = () => {
     setLoginVisible(true);
@@ -20,11 +25,11 @@ const Page: React.FC = () => {
   return (
     <main className="relative min-h-screen">
       <Header onLoginClick={handleShowLogin} />
-      <Index onLoginClick={handleShowLogin}></Index>
-
-        <FooterMobile></FooterMobile>
-        {isLoginVisible && <LoginComponent close={handleCloseLogin} />}
+      <Index onLoginClick={handleShowLogin} />
+      <FooterMobile />
+      {isLoginVisible && <LoginComponent close={handleCloseLogin} session={userSessionId} />}
     </main>
   );
 }
+
 export default Page;

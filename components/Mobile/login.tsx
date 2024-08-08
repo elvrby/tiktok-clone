@@ -1,12 +1,33 @@
-import React from "react";
+"use client"
+
 import Image from "next/image";
 import Link from "next/link";
+import React, { useState, useEffect } from 'react';
+import { useUserSession } from '@/hooks/use-user-session';
+import { signInWithGoogle, signOutWithGoogle } from '@/libs/firebase/auth';
+import { createSession, removeSession } from '@/actions/auth-actions';
 
-interface LoginComponentProps {
+    interface LoginComponentProps {
     close: () => void;
+    session: string | null;
   }
 
-  const LoginComponent: React.FC<LoginComponentProps> = ({ close }) => {
+  export function LoginComponent({ close, session }: LoginComponentProps) {
+    const userSessionId = useUserSession(session);
+  
+    const handleSignIn = async () => {
+      const userUid = await signInWithGoogle();
+      if (userUid) {
+        await createSession(userUid);
+      }
+    };
+  
+    const handleSignOut = async () => {
+      await signOutWithGoogle();
+      await removeSession();
+    };
+
+
   return (
     <div>
         <Image src="/wall1.jpg" layout="fill" objectFit="cover" objectPosition="center" alt="" className="md:hidden"/>
@@ -59,7 +80,7 @@ interface LoginComponentProps {
             </button>
           </div>
           <div className="w-[340px] h-11 mt-2 mb-2">
-            <button className="w-full h-full bg-[#4A4A4A] rounded-lg flex items-center justify-between p-3 border border-[#4A4A4A] hover:border-white hover:bg-black">
+            <button onClick={handleSignIn} className="w-full h-full bg-[#4A4A4A] rounded-lg flex items-center justify-between p-3 border border-[#4A4A4A] hover:border-white hover:bg-black">
               <div className="flex items-center w-full">
                 <svg className="w-5 h-5" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M22 11.6542C22 10.8798 21.9382 10.1012 21.8062 9.3394H11.2216V13.7262H17.2829C17.0314 15.141 16.2232 16.3926 15.0398 17.1879V20.0342H18.656C20.7795 18.0502 22 15.1201 22 11.6542Z" fill="#4285F4"/>

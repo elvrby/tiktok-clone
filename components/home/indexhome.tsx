@@ -1,11 +1,28 @@
 import next from "next";
 import Image from "next/image";
+import LoginComponent from '@/components/Mobile/login';
+import { useUserSession } from '@/hooks/use-user-session';
+import { onAuthStateChanged,getUserRoles , signInWithGoogle, signOutWithGoogle } from '@/libs/firebase/auth';
+import { User } from 'firebase/auth';
+import { createSession, removeSession } from '@/actions/auth-actions';
 
-interface IndexProps {
-    onLoginClick: () => void;
+interface IndexHomePageProps {
+    session: string | null;
   }
 
-const Index: React.FC<IndexProps> = ({ onLoginClick }) =>{
+  export function IndexHome ({session}: IndexHomePageProps){
+    const userSessionId = useUserSession(session);
+    const handleSignIn = async () => {
+        const userUid = await signInWithGoogle();
+        if (userUid) {
+          await createSession(userUid);
+        }
+      };
+    
+      const handleSignOut = async () => {
+        await signOutWithGoogle();
+        await removeSession();
+      };
     return(
         <main className="flex justify-between w-full h-[calc(100vh-4rem)]">
 
@@ -100,7 +117,7 @@ const Index: React.FC<IndexProps> = ({ onLoginClick }) =>{
                     </div>
 
                     <div className="w-full mt-5">
-                        <button type="button" onClick={onLoginClick} className="w-full text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">Log In</button>
+                        <button type="button" onClick={handleSignOut} className="w-full text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">Log In</button>
                     </div>
                 </div>
 
@@ -334,4 +351,4 @@ const Index: React.FC<IndexProps> = ({ onLoginClick }) =>{
         </main>
     )
 }
-export default Index;
+export default IndexHome;
