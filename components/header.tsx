@@ -58,10 +58,10 @@ const Header: React.FC = () => {
 
                     <div className="flex justify-between w-56">
                         <div>
-                            <h1>Friends</h1>
+                            <h1 className="text-[#DADADA]">Friends</h1>
                         </div>
                         <div>
-                            <h1>Following</h1>
+                            <h1 className="text-[#DADADA]">Following</h1>
                         </div>
                         <div className="flex flex-col items-center">
                             <h1 className="font-bold">For You</h1>
