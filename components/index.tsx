@@ -273,16 +273,16 @@ const Index: React.FC = () =>{
 
                             </div>
                             <div className="w-full flex flex-col mt-2">
-                                <div className="bg-[#4A4A4A] rounded-full w-full h-11 flex items-center justify-center">
-                                    <svg className="w-5" viewBox="0 0 30 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <div className=" rounded-full w-full h-11 flex items-center justify-center">
+                                    <svg className="w-7" viewBox="0 0 30 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M14.9508 25.4304C14.5553 25.4314 14.1635 25.3541 13.7979 25.2031C13.4324 25.0521 13.1003 24.8303 12.8208 24.5504L2.52079 14.2504C1.70713 13.4279 1.06528 12.4517 0.632638 11.3787C0.199995 10.3057 -0.0147917 9.15727 0.000791025 8.00041C0.00863074 6.94025 0.22555 5.89205 0.639123 4.91585C1.0527 3.93966 1.6548 3.05465 2.41094 2.31151C3.16708 1.56837 4.0624 0.981714 5.04563 0.585137C6.02885 0.18856 7.08065 -0.0101431 8.14079 0.000408903C9.2199 -0.0104609 10.2902 0.195485 11.2882 0.606032C12.2863 1.01658 13.1917 1.62337 13.9508 2.39041L14.9508 3.39041L15.7708 2.57041C17.1867 1.11698 19.0814 0.225922 21.1039 0.0622833C23.1264 -0.101355 25.1396 0.473512 26.7708 1.68041C27.6993 2.39546 28.4648 3.30013 29.0164 4.33417C29.5679 5.36821 29.8928 6.5079 29.9695 7.67733C30.0461 8.84676 29.8727 10.0191 29.4608 11.1163C29.049 12.2135 28.4081 13.2103 27.5808 14.0404L17.0808 24.5504C16.8013 24.8303 16.4692 25.0521 16.1037 25.2031C15.7381 25.3541 15.3463 25.4314 14.9508 25.4304Z" fill="white"/>
                                     </svg>
                                 </div>
                                 <span className="mt-1">80k</span>
                             </div>
                             <div className="w-full flex flex-col mt-2">
-                                <div className="bg-[#4A4A4A] rounded-full w-full h-11 flex items-center justify-center">
-                                    <svg className="w-5" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <div className=" rounded-full w-full h-11 flex items-center justify-center">
+                                    <svg className="w-7" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M11.5118 20.6223V25C11.5118 25 25 19.7581 25 10.2534C25 0.748766 17.6747 0 11.5118 0C5.3489 0 0 5.24189 0 11.0022C0 16.7625 6.33712 20.6223 11.5118 20.6223Z" fill="white"/>
                                         <path d="M8.23125 11.6429C8.98483 11.6429 9.59573 11.0377 9.59573 10.291C9.59573 9.54439 8.98483 8.93912 8.23125 8.93912C7.47767 8.93912 6.86677 9.54439 6.86677 10.291C6.86677 11.0377 7.47767 11.6429 8.23125 11.6429Z" fill="#231F20"/>
                                         <path d="M12.6887 11.6429C13.4422 11.6429 14.0531 11.0377 14.0531 10.291C14.0531 9.54439 13.4422 8.93912 12.6887 8.93912C11.9351 8.93912 11.3242 9.54439 11.3242 10.291C11.3242 11.0377 11.9351 11.6429 12.6887 11.6429Z" fill="#231F20"/>
@@ -292,16 +292,16 @@ const Index: React.FC = () =>{
                                 <span className="mt-1">80k</span>
                             </div>
                             <div className="w-full flex flex-col mt-2">
-                                <div className="bg-[#4A4A4A] rounded-full w-full h-11 flex items-center justify-center">
-                                    <svg className="w-4" viewBox="0 0 20 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <div className=" rounded-full w-full h-11 flex items-center justify-center">
+                                    <svg className="w-6" viewBox="0 0 20 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M9.02767 17.7554H11.1299L17.0214 22.3394C17.3445 22.5907 17.7402 22.7268 18.1478 22.7268C19.1703 22.7268 19.9985 21.8885 19.9975 20.8522C19.99 15.4108 19.9716 0 20 0C20.0343 0 0 0 0 0V20.8527C0 21.888 0.828155 22.7273 1.84968 22.7273H1.8964C2.29805 22.7273 2.68827 22.5948 3.00889 22.3499L9.02817 17.7554H9.02767Z" fill="white"/>
                                     </svg>
                                 </div>
                                 <span className="mt-1">80k</span>
                             </div>
                             <div className="w-full flex flex-col mt-2">
-                                <div className="bg-[#4A4A4A] rounded-full w-full h-11 flex items-center justify-center">
-                                    <svg className="w-5" viewBox="0 0 29 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <div className=" rounded-full w-full h-11 flex items-center justify-center">
+                                    <svg className="w-7" viewBox="0 0 29 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8.49569 17.3381H15.974L16.0183 23.015L29 11.9696L15.9303 0V5.06086C15.9303 5.06086 0 3.3005 0 22.0033L3.21667 19.2755C4.69171 18.0249 6.56246 17.3387 8.49621 17.3387L8.49569 17.3381Z" fill="white"/>
                                     </svg>
                                 </div>
