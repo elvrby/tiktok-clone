@@ -1,0 +1,12 @@
+// tailwind.config.js
+module.exports = {
+  theme: {
+    screens: {
+      'sm': '640px',
+      'md': '768px', // Ukuran untuk tablet
+      'lg': '1024px', // Ukuran untuk tablet besar / desktop kecil
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
+  },
+}
