@@ -269,8 +269,14 @@ const Index: React.FC = () =>{
                 <div className="absolute bottom-0 right-0 h-full mr-2 w-11 flex flex-col justify-end mb-4">
                         <div className="w-full h-full flex flex-col justify-end">
                             {/* fitur */}
-                            <div className="bg-white rounded-full w-full h-11 mb-2">
-
+                            <div className="bg-white rounded-full w-full h-11 mb-2 flex flex-col justify-end right-0 bottom-0 items-center relative">
+                                <a className="absolute bottom-0 top-8 bg-red-700 w-6 h-6 rounded-full">
+                                    <svg className="w-full" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16V17C32 25.8366 24.8366 33 16 33C7.16344 33 0 25.8366 0 17V16Z" fill="#FF3B5C"/>
+                                        <path d="M15.125 10H16.875V23H15.125V10Z" fill="white"/>
+                                        <path d="M23 15.6875V17.3125H9V15.6875H23Z" fill="white"/>
+                                    </svg>
+                                </a>
                             </div>
                             <div className="w-full flex flex-col mt-2">
                                 <div className=" rounded-full w-full h-11 flex items-center justify-center">
