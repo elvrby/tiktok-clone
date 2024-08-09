@@ -1,23 +1,17 @@
 "use client";
 
-import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import LoginComponent from '@/components/Mobile/login';
+import { User } from 'firebase/auth';
 import { useUserSession } from '@/hooks/use-user-session';
 import { onAuthStateChanged, getUserRoles, signInWithGoogle, signOutWithGoogle } from '@/libs/firebase/auth';
-import { User } from 'firebase/auth';
 import { createSession, removeSession } from '@/actions/auth-actions';
 import IndexHome from '@/components/home/indexhome';
 import HeaderHome from '@/components/home/headerhome';
 import FooterMobileHome from '@/components/Mobile/footerhome';
 
-interface HomePageProps {
-    session?: string | null;
-}
-
-const HomePage: React.FC<HomePageProps> = ({ session = null }) => {
+const HomePage: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
-    const userSessionId = useUserSession(session);
+    const userSessionId = useUserSession(null);
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
