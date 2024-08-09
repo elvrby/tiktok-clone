@@ -1,21 +1,20 @@
-"use client"
-import Link from "next/link";
+"use client";
+
+import React from "react";
 import { signOutWithGoogle } from '@/libs/firebase/auth';
 import { removeSession } from '@/actions/auth-actions';
 
-interface ProfilePageProps {
-    session: string | null;
-  }
-
-export function ProfilePage({session}: ProfilePageProps){
+const ProfilePage: React.FC = () => {
     const handleSignOut = async () => {
         await signOutWithGoogle();
         await removeSession();
-      };
-    return(
+    };
+
+    return (
         <main>
             <button onClick={handleSignOut}>Sign Out</button>
         </main>
-    )
-}
+    );
+};
+
 export default ProfilePage;
