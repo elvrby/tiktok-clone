@@ -15,7 +15,7 @@ interface HomePageProps {
     session?: string | null;
 }
 
-const HomePages: React.FC<HomePageProps> = ({ session = null }) => {
+const HomePage: React.FC<HomePageProps> = ({ session = null }) => {
     const [user, setUser] = useState<User | null>(null);
     const userSessionId = useUserSession(session);
     const [isAdmin, setIsAdmin] = useState(false);
@@ -54,3 +54,5 @@ const HomePages: React.FC<HomePageProps> = ({ session = null }) => {
         </main>
     );
 };
+
+export default HomePage;
