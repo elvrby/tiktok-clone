@@ -7,7 +7,7 @@ import HeaderHome from "@/components/home/headerhome";
 import FooterMobileHome from "@/components/Mobile/footerhome";
 
 
-  export function ProfilePage (){
+const ProfilePage: React.FC = () =>{
     const [underlineStyle, setUnderlineStyle] = useState({});
   const [selectedButton, setSelectedButton] = useState("videos"); // State untuk melacak tombol yang dipilih
   const videoButtonRef = useRef<HTMLButtonElement>(null);
@@ -101,7 +101,7 @@ import FooterMobileHome from "@/components/Mobile/footerhome";
     return () => {
       document.removeEventListener("mouseup", handleContainerMouseLeave);
     };
-  }, []);
+  }, );
 
     return(
         
