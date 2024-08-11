@@ -1,5 +1,6 @@
 import next from "next";
 import Image from "next/image";
+import Link from "next/link";
 import LoginComponent from '@/components/Mobile/login';
 import { useUserSession } from '@/hooks/use-user-session';
 import { onAuthStateChanged,getUserRoles , signInWithGoogle, signOutWithGoogle } from '@/libs/firebase/auth';
@@ -29,8 +30,8 @@ interface IndexHomePageProps {
             {/*         Side Bar         */}
             <div className="w-72 h-full bg-[#1E1E1E] p-5 hidden xl:block ">
                 {/*     Page Sidebar     */}
-                <div className="Pages-Sidebar block relative font-semibold ml-2">
-                    <a href="#">
+                <div className="Pages-Sidebar block relative font-semibold ml-2 text-[#FF3B5C]">
+                    <Link href="/home" passHref>
                         <div className="flex items-center w-full h-10 mb-5 hover:text-red">
                             <div className="w-8 justify-center flex items-center">
                                 <svg width="29" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -38,10 +39,10 @@ interface IndexHomePageProps {
                                 </svg>
                             </div>
                             <div className="w-full flex items-center text-center ml-3">
-                                <h1 className="text-xl items-center justify-center text-[#FF3B5C]">For You</h1>
+                                <h1 className="text-xl items-center justify-center">For You</h1>
                             </div>
                         </div>  
-                    </a> 
+                    </Link> 
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C] ">
@@ -65,8 +66,8 @@ interface IndexHomePageProps {
                     <a href="#">
                         <div className="flex items-center w-full h-10 mb-5 ">
                             <div className="w-8 justify-center flex items-center">
-                                <svg width="28" height="25" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 24.0264C1 24.0264 2.08901 16.3206 10.2027 16.3206C18.3164 16.3206 19.0087 24.0264 19.0087 24.0264M31.0001 24.0264C31.0001 24.0264 29.4036 18.2689 24.1413 18.2689C18.8791 18.2689 17.7987 20.4285 17.7987 20.4285M15.7871 6.58441C15.7871 9.6686 13.2869 12.1688 10.2027 12.1688C7.11853 12.1688 4.6183 9.6686 4.6183 6.58441C4.6183 3.50023 7.11853 1 10.2027 1C13.2869 1 15.7871 3.50023 15.7871 6.58441ZM27.7933 10.2364C27.7933 12.2533 26.1582 13.8884 24.1413 13.8884C22.1244 13.8884 20.4893 12.2533 20.4893 10.2364C20.4893 8.21946 22.1244 6.58441 24.1413 6.58441C26.1582 6.58441 27.7933 8.21946 27.7933 10.2364Z" stroke="white" stroke-miterlimit="10"/>
+                                <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1.00785 27C1.00785 27 0.234125 17.168 14.048 17.168M20.3698 17.72L15.5104 22.5228M15.5104 22.5228L20.1528 26.9528M15.5104 22.5228L28.4939 22.4001M16.9353 6.65197C16.9353 9.77347 14.4048 12.3039 11.2833 12.3039C8.1618 12.3039 5.63133 9.77347 5.63133 6.65197C5.63133 3.53047 8.1618 1 11.2833 1C14.4048 1 16.9353 3.53047 16.9353 6.65197Z" stroke="white" stroke-miterlimit="10"/>
                                 </svg>
                             </div>
                             <div className="w-full flex items-center text-center ml-3">
@@ -74,6 +75,21 @@ interface IndexHomePageProps {
                             </div>
                         </div>  
                     </a>
+                </div>
+
+                <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
+                    <Link href="/profile">
+                        <div className="flex items-center w-full h-10 mb-3 ">
+                            <div className="w-8 justify-center flex items-center">
+                                <svg width="28" height="25" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1 24.0264C1 24.0264 2.08901 16.3206 10.2027 16.3206C18.3164 16.3206 19.0087 24.0264 19.0087 24.0264M31.0001 24.0264C31.0001 24.0264 29.4036 18.2689 24.1413 18.2689C18.8791 18.2689 17.7987 20.4285 17.7987 20.4285M15.7871 6.58441C15.7871 9.6686 13.2869 12.1688 10.2027 12.1688C7.11853 12.1688 4.6183 9.6686 4.6183 6.58441C4.6183 3.50023 7.11853 1 10.2027 1C13.2869 1 15.7871 3.50023 15.7871 6.58441ZM27.7933 10.2364C27.7933 12.2533 26.1582 13.8884 24.1413 13.8884C22.1244 13.8884 20.4893 12.2533 20.4893 10.2364C20.4893 8.21946 22.1244 6.58441 24.1413 6.58441C26.1582 6.58441 27.7933 8.21946 27.7933 10.2364Z" stroke="white" stroke-miterlimit="10"/>
+                                </svg>
+                            </div>
+                            <div className="w-full flex items-center text-center ml-3">
+                                <h1 className="text-xl items-center justify-center">Friends</h1>
+                            </div>
+                        </div>  
+                    </Link>
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
@@ -93,31 +109,39 @@ interface IndexHomePageProps {
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
-                    <a href="#">
-                        <div className="flex items-center w-full h-10 mb-3 ">
-                            <div className="w-8 justify-center flex items-center">
-                                <svg width="23" height="32" viewBox="0 0 23 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 31C1 31 1.70315 20.1955 11.485 20.1955C21.2668 20.1955 22.3535 31 22.3535 31M19.1432 7.85658C19.1432 11.6434 16.0734 14.7132 12.2866 14.7132C8.49986 14.7132 5.43006 11.6434 5.43006 7.85658C5.43006 4.06979 8.49986 1 12.2866 1C16.0734 1 19.1432 4.06979 19.1432 7.85658Z" stroke="white" stroke-miterlimit="10"/>
-                                </svg>
+                    <Link href="/profile">
+                        <div className="flex items-center w-full h-10 "> 
+                            <div className="w-8 h-6 bg-white rounded-full justify-center flex items-center">
+
                             </div>
                             <div className="w-full flex items-center text-center ml-3">
                                 <h1 className="text-xl items-center justify-center">Profile</h1>
                             </div>
                         </div>  
-                    </a>
+                    </Link>
                 </div>
 
-                {/*     Log In Sidebar   */}
-                <div className="w-full mt-10">
-                    <div>
-                        <span>Log In to follow creators,
-                            like videos, and view
-                            comments.
-                        </span>
+                
+
+                {/*     Followers Sidebar   */}
+                <div className="w-full mt-5 text-sm text-[#DADADA]">
+                    <div className="text-[12px]">
+                        <span>Following accounts</span>
                     </div>
 
-                    <div className="w-full mt-5">
-                        <button type="button" onClick={handleSignOut} className="w-full text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">Log In</button>
+                    <div className="w-full mt-4 flex items-center justify-between">
+                        <div className="w-8 h-7 bg-white rounded-full">
+
+                        </div>
+                        <div className="w-full flex flex-col ml-2">
+                            <a href="">Akimania</a>
+                            <span className="text-[10px]">Akimania</span>
+                        </div>
+                    </div>
+                    <div className="text-[12px] text-[#FF3B5C] mt-2">
+                        <Link href={"/following"} passHref>
+                            <span>See more</span>
+                        </Link>
                     </div>
                 </div>
 
@@ -147,7 +171,7 @@ interface IndexHomePageProps {
             <div className="w-20 h-full bg-[#1E1E1E] p-5 hidden xl:hidden md:block">
                 {/*     Page Sidebar     */}
                 <div className="Pages-Sidebar block relative font-semibold ml-2">
-                    <a href="#">
+                    <Link href="/">
                         <div className="flex items-center w-full h-10 mb-5 hover:text-red">
                             <div className="w-8 justify-center flex items-center">
                                 <svg width="29" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -155,7 +179,7 @@ interface IndexHomePageProps {
                                 </svg>
                             </div>
                         </div>  
-                    </a> 
+                    </Link> 
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C] ">
@@ -175,12 +199,24 @@ interface IndexHomePageProps {
                     <a href="#">
                         <div className="flex items-center w-full h-10 mb-5 ">
                             <div className="w-8 justify-center flex items-center">
+                                <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1.00785 27C1.00785 27 0.234125 17.168 14.048 17.168M20.3698 17.72L15.5104 22.5228M15.5104 22.5228L20.1528 26.9528M15.5104 22.5228L28.4939 22.4001M16.9353 6.65197C16.9353 9.77347 14.4048 12.3039 11.2833 12.3039C8.1618 12.3039 5.63133 9.77347 5.63133 6.65197C5.63133 3.53047 8.1618 1 11.2833 1C14.4048 1 16.9353 3.53047 16.9353 6.65197Z" stroke="white" stroke-miterlimit="10"/>
+                                </svg>
+                            </div>
+                        </div>  
+                    </a>
+                </div>
+
+                <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
+                    <Link href="">
+                        <div className="flex items-center w-full h-10 mb-3 ">
+                            <div className="w-8 justify-center flex items-center">
                                 <svg width="28" height="25" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M1 24.0264C1 24.0264 2.08901 16.3206 10.2027 16.3206C18.3164 16.3206 19.0087 24.0264 19.0087 24.0264M31.0001 24.0264C31.0001 24.0264 29.4036 18.2689 24.1413 18.2689C18.8791 18.2689 17.7987 20.4285 17.7987 20.4285M15.7871 6.58441C15.7871 9.6686 13.2869 12.1688 10.2027 12.1688C7.11853 12.1688 4.6183 9.6686 4.6183 6.58441C4.6183 3.50023 7.11853 1 10.2027 1C13.2869 1 15.7871 3.50023 15.7871 6.58441ZM27.7933 10.2364C27.7933 12.2533 26.1582 13.8884 24.1413 13.8884C22.1244 13.8884 20.4893 12.2533 20.4893 10.2364C20.4893 8.21946 22.1244 6.58441 24.1413 6.58441C26.1582 6.58441 27.7933 8.21946 27.7933 10.2364Z" stroke="white" stroke-miterlimit="10"/>
                                 </svg>
                             </div>
                         </div>  
-                    </a>
+                    </Link>
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
@@ -197,15 +233,13 @@ interface IndexHomePageProps {
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
-                    <a href="#">
-                        <div className="flex items-center w-full h-10 mb-3 ">
-                            <div className="w-8 justify-center flex items-center">
-                                <svg width="23" height="32" viewBox="0 0 23 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 31C1 31 1.70315 20.1955 11.485 20.1955C21.2668 20.1955 22.3535 31 22.3535 31M19.1432 7.85658C19.1432 11.6434 16.0734 14.7132 12.2866 14.7132C8.49986 14.7132 5.43006 11.6434 5.43006 7.85658C5.43006 4.06979 8.49986 1 12.2866 1C16.0734 1 19.1432 4.06979 19.1432 7.85658Z" stroke="white" stroke-miterlimit="10"/>
-                                </svg>
+                    <Link href="/profile">
+                        <div className="flex items-center w-full h-10 "> 
+                            <div className="w-8 h-8 bg-white rounded-full justify-center flex items-center">
+
                             </div>
                         </div>  
-                    </a>
+                    </Link>
                 </div>
 
             </div>

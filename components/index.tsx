@@ -1,5 +1,6 @@
 import next from "next";
 import Image from "next/image";
+import Link from "next/link";
 
 interface IndexProps {
     onLoginClick: () => void;
@@ -76,7 +77,7 @@ const Index: React.FC<IndexProps> = ({ onLoginClick }) =>{
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
-                    <a href="#">
+                    <Link href="/login" passHref>
                         <div className="flex items-center w-full h-10 mb-3 ">
                             <div className="w-8 justify-center flex items-center">
                                 <svg width="23" height="32" viewBox="0 0 23 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -87,7 +88,7 @@ const Index: React.FC<IndexProps> = ({ onLoginClick }) =>{
                                 <h1 className="text-xl items-center justify-center">Profile</h1>
                             </div>
                         </div>  
-                    </a>
+                    </Link>
                 </div>
 
                 {/*     Log In Sidebar   */}
@@ -180,7 +181,7 @@ const Index: React.FC<IndexProps> = ({ onLoginClick }) =>{
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
-                    <a href="#">
+                    <Link href="/login" passHref>
                         <div className="flex items-center w-full h-10 mb-3 ">
                             <div className="w-8 justify-center flex items-center">
                                 <svg width="23" height="32" viewBox="0 0 23 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -188,7 +189,7 @@ const Index: React.FC<IndexProps> = ({ onLoginClick }) =>{
                                 </svg>
                             </div>
                         </div>  
-                    </a>
+                    </Link>
                 </div>
 
             </div>

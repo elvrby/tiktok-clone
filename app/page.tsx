@@ -4,7 +4,7 @@ import Image from "next/image";
 import Header from "@/components/header";
 import Index from "@/components/index";
 import FooterMobile from "@/components/Mobile/footer";
-import LoginComponent from "@/components/Mobile/login";
+import FloatingLoginComponent from "@/components/floatinglogin";
 import { useUserSession } from '@/hooks/use-user-session';
 
 const Page: React.FC = () => {
@@ -27,7 +27,7 @@ const Page: React.FC = () => {
       <Header onLoginClick={handleShowLogin} />
       <Index onLoginClick={handleShowLogin} />
       <FooterMobile />
-      {isLoginVisible && <LoginComponent close={handleCloseLogin} session={userSessionId} />}
+      {isLoginVisible && <FloatingLoginComponent close={handleCloseLogin} session={userSessionId} />}
     </main>
   );
 }
