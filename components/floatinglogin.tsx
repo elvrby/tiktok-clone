@@ -29,7 +29,7 @@ import { createSession, removeSession } from '@/actions/auth-actions';
 
 
   return (
-    <div>
+    <div className="text-white">
        
     <div className="fixed inset-0 flex flex-col items-center justify-center p-4">
       <div className="bg-[#1E1E1E] rounded-tl-lg rounded-tr-lg shadow-lg w-full max-w-md p-6">

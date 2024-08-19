@@ -13,6 +13,12 @@ export function onAuthStateChanged(callback: (authUser: User | null) => void) {
   return _onAuthStateChanged(firebaseAuth, callback);
 }
 
+// Function to generate a random name starting with 'user'
+function generateRandomName(): string {
+  const randomString = Math.random().toString(36).substring(2, 15); // Generate random string
+  return `user${randomString}`; // Prefix with 'user'
+}
+
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
 
@@ -26,6 +32,7 @@ export async function signInWithGoogle() {
     const uid = user.uid;
     const email = user.email || 'No email';
     const username = user.displayName || 'No username';
+    const name = generateRandomName();
 
     const userDocRef = doc(firebaseFirestore, 'users', uid);
     const userDoc = await getDoc(userDocRef);
@@ -34,9 +41,17 @@ export async function signInWithGoogle() {
       // Save user data to 'users' collection in Firestore with roles set to null
       await setDoc(userDocRef, {
         email,
+        name,
         username,
         uid,
         roles: null, // Set roles to null initially
+        bio: 'your bio goes here', // Default bio
+        following: [], // Default empty array for following
+        followers: [], // Default empty array for followers
+        likes: [], // Default likes count
+        posts: [], // Default empty array for posts
+        profileImage: '', // Default empty string for profile image
+        theme: 'dark', // Default theme
       });
     }
 
@@ -66,6 +81,22 @@ export async function getUserRoles(uid: string) {
     }
   } catch (error) {
     console.error('Error getting user roles', error);
+    return null;
+  }
+}
+
+
+
+export async function getUserData(uid: string) {
+  try {
+    const userDoc = await getDoc(doc(firebaseFirestore, 'users', uid));
+    if (userDoc.exists()) {
+      return userDoc.data();
+    } else {
+      throw new Error('No such user!');
+    }
+  } catch (error) {
+    console.error('Error fetching user data', error);
     return null;
   }
 }

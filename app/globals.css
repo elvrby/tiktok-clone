@@ -4,27 +4,71 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
 }
+
+body{
+  background-color: black;
+}
+
+body.dark-theme {
+  background-color: #000000; /* Dark mode background */
+  color: #ffffff; /* Dark mode text color */
+}
+
+body.dark-theme header {
+  background-color: #1E1E1E; /* Dark mode header background */
+}
+body.dark-theme input {
+  background-color: #1E1E1E; /* Dark mode header background */
+}
+
+body.dark-theme .bar {
+  background-color: #1E1E1E; /* Default light theme */
+  transition: background-color 0.3s ease; /* Smooth transition for theme change */
+}
+
+/* Light theme */
+body.light-theme {
+  background-color: #F3F3F3; /* Light mode background */
+  color: #000000; /* Light mode text color */
+}
+
+body.light-theme header {
+  background-color: white; /* Light mode header background */
+  color: #000000;
+}
+body.light-theme input {
+  background-color: #EAEAEA; /* Light mode header background */
+  color: #000000;
+}
+body.light-theme span {
+  color: #000000;
+}
+body.light-theme a {
+  color: #000000;
+}
+
+/* Base sidebar styles */
+body.light-theme .bar {
+  background-color: white; /* Default light theme */
+  transition: background-color 0.3s ease; /* Smooth transition for theme change */
+}
+
+
+
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
+    --foreground-rgb: 0, 0, 0;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
+
+
 
 @layer utilities {
   .text-balance {

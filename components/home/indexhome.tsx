@@ -28,7 +28,7 @@ interface IndexHomePageProps {
         <main className="flex justify-between w-full h-[calc(100vh-4rem)]">
 
             {/*         Side Bar         */}
-            <div className="w-72 h-full bg-[#1E1E1E] p-5 hidden xl:block ">
+            <div className="bar w-72 h-full p-5 hidden xl:block ">
                 {/*     Page Sidebar     */}
                 <div className="Pages-Sidebar block relative font-semibold ml-2 text-[#FF3B5C]">
                     <Link href="/home" passHref>

@@ -8,10 +8,10 @@ interface IndexProps {
 
 const Index: React.FC<IndexProps> = ({ onLoginClick }) =>{
     return(
-        <main className="flex justify-between w-full h-[calc(100vh-4rem)]">
+        <main className="flex justify-between w-full h-[calc(100vh-4rem)] bg-black">
 
             {/*         Side Bar         */}
-            <div className="w-72 h-full bg-[#1E1E1E] p-5 hidden xl:block ">
+            <div className="w-72 h-full bg-[#1E1E1E] p-5 hidden xl:block text-white ">
                 {/*     Page Sidebar     */}
                 <div className="Pages-Sidebar block relative font-semibold ml-2">
                     <a href="#">
@@ -195,8 +195,8 @@ const Index: React.FC<IndexProps> = ({ onLoginClick }) =>{
             </div>
 
             {/* Main Konten */}
-            <div className="w-full text-center items-center justify-center hidden md:flex">
-                <div className="w-5/6 items-center justify-center flex p-1 h-[calc(100vh-8rem)] mr-11">
+            <div className="w-full text-center items-center justify-center hidden md:flex text-white bg-black">
+                <div className="w-5/6 items-center justify-center flex p-1 h-[calc(100vh-8rem)] mr-11 bg-black">
                     {/* Layout */}
                     <div className="w-[calc(100vh-32rem)] h-full bg-[#4A4A4A] rounded-xl relative overflow-hidden">
                         <Image 
@@ -265,7 +265,7 @@ const Index: React.FC<IndexProps> = ({ onLoginClick }) =>{
 
 
             {/* Main Konten Mobile */}
-            <div className="relative w-full h-full text-center flex items-center justify-center md:hidden">
+            <div className="relative w-full h-full text-center flex items-center justify-center md:hidden bg-black">
                 <div className="relative w-full h-full">
                     <Image 
                         src="/wall1.jpg" 
@@ -277,7 +277,7 @@ const Index: React.FC<IndexProps> = ({ onLoginClick }) =>{
                 </div>
 
                 {/* Container Layout */}
-                <div className="absolute bottom-0 right-0 h-full mr-2 w-11 flex flex-col justify-end mb-4">
+                <div className="absolute bottom-0 right-0 h-full mr-2 w-11 flex flex-col justify-end mb-4 text-white">
                         <div className="w-full h-full flex flex-col justify-end">
                             {/* fitur */}
                             <div className="bg-white rounded-full w-full h-11 mb-2 flex flex-col justify-end right-0 bottom-0 items-center relative">

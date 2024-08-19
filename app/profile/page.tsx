@@ -5,103 +5,176 @@ import Image from "next/image";
 import Link from "next/link";
 import HeaderHome from "@/components/home/headerhome";
 import FooterMobileHome from "@/components/Mobile/footerhome";
+import { getUserData, onAuthStateChanged as customOnAuthStateChanged } from '../../libs/firebase/auth';
+import { firebaseAuth, firebaseFirestore } from '../../libs/firebase/config';
+import { onAuthStateChanged as firebaseOnAuthStateChanged, User } from 'firebase/auth';
 
 
 const ProfilePage: React.FC = () =>{
-    const [underlineStyle, setUnderlineStyle] = useState({});
-  const [selectedButton, setSelectedButton] = useState("videos"); // State untuk melacak tombol yang dipilih
-  const videoButtonRef = useRef<HTMLButtonElement>(null);
-  const favoritesButtonRef = useRef<HTMLButtonElement>(null);
-  const likesButtonRef = useRef<HTMLButtonElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const updateUnderline = (buttonRef: React.RefObject<HTMLButtonElement>, transition: string) => {
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      setUnderlineStyle({
-        width: `${rect.width}px`,
-        transform: `translateX(${rect.left - buttonRef.current.parentElement!.getBoundingClientRect().left}px)`,
-        transition: transition
+    // Theme
+    const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState<User | null>(null);
+  
+    useEffect(() => {
+      const unsubscribe = firebaseOnAuthStateChanged(firebaseAuth, (authUser) => {
+        setUser(authUser);
+        if (authUser) {
+          const fetchTheme = async () => {
+            try {
+              const userData = await getUserData(authUser.uid);
+              if (userData) {
+                const theme = userData.theme === 'dark' ? 'dark' : 'light';
+                setTheme(theme);
+                document.body.className = `${theme}-theme`;
+              }
+            } catch (error) {
+              console.error('Error fetching user data:', error);
+            } finally {
+              setLoading(false);
+            }
+          };
+  
+          fetchTheme();
+        } else {
+          setLoading(false);
+        }
       });
-    }
-  };
+  
+      return () => unsubscribe(); // Clean up the subscription on unmount
+    }, []);
 
-  useEffect(() => {
-    // Update underline position on initial render based on selected button
-    switch (selectedButton) {
-      case "videos":
-        updateUnderline(videoButtonRef, "none"); // No transition for initial render
-        break;
-      case "favorites":
-        updateUnderline(favoritesButtonRef, "none"); // No transition for initial render
-        break;
-      case "likes":
-        updateUnderline(likesButtonRef, "none"); // No transition for initial render
-        break;
-      default:
-        break;
-    }
-  }, [selectedButton]);
 
-  const handleHover = (buttonName: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (selectedButton === buttonName) return; // Jangan update underline jika tombol yang dipilih dihover
-    const button = e.currentTarget;
-    const rect = button.getBoundingClientRect();
-    setUnderlineStyle({
-      width: `${rect.width}px`,
-      transform: `translateX(${rect.left - button.parentElement!.getBoundingClientRect().left}px)`,
-      transition: 'transform 0.3s ease, width 0.3s ease'
+    // underline Main konten
+    const [underlineStyle, setUnderlineStyle] = useState({});
+    const [selectedButton, setSelectedButton] = useState("videos"); // State untuk melacak tombol yang dipilih
+    const videoButtonRef = useRef<HTMLButtonElement>(null);
+    const favoritesButtonRef = useRef<HTMLButtonElement>(null);
+    const likesButtonRef = useRef<HTMLButtonElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const updateUnderline = (buttonRef: React.RefObject<HTMLButtonElement>, transition: string) => {
+        if (buttonRef.current) {
+        const rect = buttonRef.current.getBoundingClientRect();
+        setUnderlineStyle({
+            width: `${rect.width}px`,
+            transform: `translateX(${rect.left - buttonRef.current.parentElement!.getBoundingClientRect().left}px)`,
+            transition: transition
+        });
+        }
+    };
+
+    useEffect(() => {
+        // Update underline position on initial render based on selected button
+        switch (selectedButton) {
+        case "videos":
+            updateUnderline(videoButtonRef, "none"); // No transition for initial render
+            break;
+        case "favorites":
+            updateUnderline(favoritesButtonRef, "none"); // No transition for initial render
+            break;
+        case "likes":
+            updateUnderline(likesButtonRef, "none"); // No transition for initial render
+            break;
+        default:
+            break;
+        }
+    }, [selectedButton]);
+
+    const handleHover = (buttonName: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
+        if (selectedButton === buttonName) return; // Jangan update underline jika tombol yang dipilih dihover
+        const button = e.currentTarget;
+        const rect = button.getBoundingClientRect();
+        setUnderlineStyle({
+        width: `${rect.width}px`,
+        transform: `translateX(${rect.left - button.parentElement!.getBoundingClientRect().left}px)`,
+        transition: 'transform 0.3s ease, width 0.3s ease'
+        });
+    };
+
+    const handleMouseLeave = () => {
+        // Kembalikan garis bawah ke tombol yang dipilih saat ini
+        switch (selectedButton) {
+        case "videos":
+            updateUnderline(videoButtonRef, "transform 0.3s ease, width 0.3s ease");
+            break;
+        case "favorites":
+            updateUnderline(favoritesButtonRef, "transform 0.3s ease, width 0.3s ease");
+            break;
+        case "likes":
+            updateUnderline(likesButtonRef, "transform 0.3s ease, width 0.3s ease");
+            break;
+        default:
+            break;
+        }
+    };
+
+    const handleButtonClick = (buttonName: string) => () => {
+        setSelectedButton(buttonName);
+        // Update underline to the clicked button
+        switch (buttonName) {
+        case "videos":
+            updateUnderline(videoButtonRef, "transform 0.3s ease, width 0.3s ease");
+            break;
+        case "favorites":
+            updateUnderline(favoritesButtonRef, "transform 0.3s ease, width 0.3s ease");
+            break;
+        case "likes":
+            updateUnderline(likesButtonRef, "transform 0.3s ease, width 0.3s ease");
+            break;
+        default:
+            break;
+        }
+    };
+
+    useEffect(() => {
+        // Add event listener to handle mouse leave on container
+        const handleContainerMouseLeave = (e: MouseEvent) => {
+        if (!containerRef.current?.contains(e.target as Node)) {
+            handleMouseLeave();
+        }
+        };
+
+        document.addEventListener("mouseup", handleContainerMouseLeave);
+        return () => {
+        document.removeEventListener("mouseup", handleContainerMouseLeave);
+        };
+    }, );
+
+    //   Database
+    const [username, setUsername] = useState<string | null>(null);
+    const [uid, setUid] = useState<string | null>(null);
+    const [name, setName] = useState<string | null>(null);
+    const [bio, setBio] = useState<string | null>(null);
+    const [followingCount, setFollowingCount] = useState<number>(0);
+    const [followersCount, setFollowersCount] = useState<number>(0);
+    const [likesCount, setLikesCount] = useState<number>(0);
+
+    useEffect(() => {
+    const unsubscribe = customOnAuthStateChanged(async (user) => {
+        if (user) {
+        setUid(user.uid);
+        const userData = await getUserData(user.uid);
+        if (userData) {
+            setUsername(userData.username);
+            setName(userData.name);
+            setBio(userData.bio);
+            setFollowingCount(userData.following?.length || 0);
+            setFollowersCount(userData.followers?.length || 0);
+            setLikesCount(userData.likes?.length || 0);
+        }
+        } else {
+        setUsername(null);
+        setName(null);
+        setBio(null);
+        setFollowingCount(0);
+        setFollowersCount(0);
+        setLikesCount(0);
+        }
     });
-  };
 
-  const handleMouseLeave = () => {
-    // Kembalikan garis bawah ke tombol yang dipilih saat ini
-    switch (selectedButton) {
-      case "videos":
-        updateUnderline(videoButtonRef, "transform 0.3s ease, width 0.3s ease");
-        break;
-      case "favorites":
-        updateUnderline(favoritesButtonRef, "transform 0.3s ease, width 0.3s ease");
-        break;
-      case "likes":
-        updateUnderline(likesButtonRef, "transform 0.3s ease, width 0.3s ease");
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleButtonClick = (buttonName: string) => () => {
-    setSelectedButton(buttonName);
-    // Update underline to the clicked button
-    switch (buttonName) {
-      case "videos":
-        updateUnderline(videoButtonRef, "transform 0.3s ease, width 0.3s ease");
-        break;
-      case "favorites":
-        updateUnderline(favoritesButtonRef, "transform 0.3s ease, width 0.3s ease");
-        break;
-      case "likes":
-        updateUnderline(likesButtonRef, "transform 0.3s ease, width 0.3s ease");
-        break;
-      default:
-        break;
-    }
-  };
-
-  useEffect(() => {
-    // Add event listener to handle mouse leave on container
-    const handleContainerMouseLeave = (e: MouseEvent) => {
-      if (!containerRef.current?.contains(e.target as Node)) {
-        handleMouseLeave();
-      }
-    };
-
-    document.addEventListener("mouseup", handleContainerMouseLeave);
-    return () => {
-      document.removeEventListener("mouseup", handleContainerMouseLeave);
-    };
-  }, );
+    return () => unsubscribe();
+    }, []);
 
     return(
         
@@ -156,14 +229,14 @@ const ProfilePage: React.FC = () =>{
         <div className="flex justify-between w-full h-[calc(100vh-4rem)]">
 
             {/*         Side Bar         */}
-            <div className="w-72 h-full bg-[#1E1E1E] p-5 hidden xl:block ">
+            <div className="bar w-72 h-full p-5 hidden xl:block ">
                 {/*     Page Sidebar     */}
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
                     <Link href="/home" passHref>
                         <div className="flex items-center w-full h-10 mb-5 hover:text-red">
                             <div className="w-8 justify-center flex items-center">
-                                <svg width="29" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12.6867 0.0982985L0.114698 12.0156C-0.123481 12.241 0.0340921 12.6458 0.359638 12.6458H2.46112C2.65926 12.6458 2.81995 12.8089 2.81995 13.01V23.6358C2.81995 23.8369 2.98065 24 3.17878 24H11.3726C11.5707 24 11.7314 23.8369 11.7314 23.6358V16.4305C11.7314 16.2295 11.8921 16.0664 12.0902 16.0664H13.6722C13.8703 16.0664 14.031 16.2295 14.031 16.4305V24H22.5893C22.7875 24 22.9482 23.8369 22.9482 23.6358V13.105C22.9482 12.9039 23.1088 12.7408 23.307 12.7408H25.6404C25.9665 12.7408 26.1235 12.3355 25.8848 12.1101L13.175 0.0977718C13.0372 -0.0325906 12.8235 -0.0325906 12.6857 0.0977718L12.6867 0.0982985Z" fill="white"/>
+                                <svg className={`w-7 ${ theme === "dark" ? "fill-[#DADADA]" : "fill-[#4A4A4A]"}`} viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.6867 0.0982985L0.114698 12.0156C-0.123481 12.241 0.0340921 12.6458 0.359638 12.6458H2.46112C2.65926 12.6458 2.81995 12.8089 2.81995 13.01V23.6358C2.81995 23.8369 2.98065 24 3.17878 24H11.3726C11.5707 24 11.7314 23.8369 11.7314 23.6358V16.4305C11.7314 16.2295 11.8921 16.0664 12.0902 16.0664H13.6722C13.8703 16.0664 14.031 16.2295 14.031 16.4305V24H22.5893C22.7875 24 22.9482 23.8369 22.9482 23.6358V13.105C22.9482 12.9039 23.1088 12.7408 23.307 12.7408H25.6404C25.9665 12.7408 26.1235 12.3355 25.8848 12.1101L13.175 0.0977718C13.0372 -0.0325906 12.8235 -0.0325906 12.6857 0.0977718L12.6867 0.0982985Z"/>
                                 </svg>
                             </div>
                             <div className="w-full flex items-center text-center ml-3">
@@ -178,13 +251,13 @@ const ProfilePage: React.FC = () =>{
                         <div className="flex items-center w-full h-10 mb-5 ">
                             <div className="w-8 justify-center flex items-center">
                                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M14 27C21.1797 27 27 21.1797 27 14C27 6.8203 21.1797 1 14 1C6.8203 1 1 6.8203 1 14C1 21.1797 6.8203 27 14 27Z" stroke="white" stroke-miterlimit="10"/>
+                                    <path className={` ${ theme === "dark" ? "stroke-[white]" : "stroke-[black]"}`} d="M14 27C21.1797 27 27 21.1797 27 14C27 6.8203 21.1797 1 14 1C6.8203 1 1 6.8203 1 14C1 21.1797 6.8203 27 14 27Z" stroke-miterlimit="10"/>
                                     <path d="M10.4328 12.6361L9.16772 20.8826L17.0097 16.2281L18.4265 7.88L10.4328 12.6355V12.6361ZM15.1984 15.1868L11.7787 17.2166L12.3303 13.6208L15.8161 11.5471L15.1984 15.1873V15.1868Z" fill="white"/>
                                 </svg>
                             </div>
                             <div className="w-full flex items-center text-center ml-3">
                                 <h1 className="text-xl items-center justify-center">Explore</h1>
-                                <span className="text-sm w-14 rounded-xl bg-red-700 ml-2 hover:text-white text-white">New</span>
+                                <h2 className="text-sm w-14 rounded-xl bg-red-700 ml-2 text-white">New</h2>
                             </div>
                         </div> 
                     </a>
@@ -296,7 +369,7 @@ const ProfilePage: React.FC = () =>{
             </div>
 
             {/*         Side Bar Tablet         */}
-            <div className="w-20 h-full bg-[#1E1E1E] p-5 hidden xl:hidden md:block">
+            <div className="bar w-20 h-full bg-[#1E1E1E] p-5 hidden xl:hidden md:block">
                 {/*     Page Sidebar     */}
                 <div className="Pages-Sidebar block relative font-semibold ml-2">
                     <Link href="/">
@@ -375,39 +448,41 @@ const ProfilePage: React.FC = () =>{
             </div>
 
             {/* Main Konten */}
-            <div className="w-full text-center items-center justify-center hidden md:flex">
-                <div className="w-full h-full p-6 flex flex-col">
-                    <div className="w-full h-full flex items-center">
+            <div className="w-full h-full overflow-y-auto flex-wrap text-center items-start justify-center hidden md:flex no-scrollbar">
+                <div className="w-full h-3/4 p-6 flex flex-col">
+                    <div className="w-full h-full flex items-start">
                         <div className="w-60 h-60 bg-white rounded-full">
 
                         </div>
                         <div className="items-center flex flex-col ml-8 font-bold">
                             <div className="w-full flex items-center text-3xl">
-                                <h2>alfarabi</h2>
-                                <span className="text-[#DADADA] text-2xl ml-2">elvrby</span>
+                                <h2>{username ? username : 'user'}</h2>
+                                <span className="text-[#DADADA] text-2xl ml-2">{name ? name : 'user'}</span>
                             </div>
 
                             <div className="flex w-full">
                                 <div className="mr-2">
-                                    <span>20</span>
+                                    <span>{followingCount}</span>
                                     <span className="ml-1 text-[#DADADA]">Following</span>
                                 </div>
                                 <div className="mr-2">
-                                    <span>100</span>
+                                    <span>{followersCount}</span>
                                     <span className="ml-1 text-[#DADADA]">Followers</span>
                                 </div>
                                 <div className="mr-2">
-                                    <span>1K</span>
+                                    <span>{likesCount}</span>
                                     <span className="ml-1 text-[#DADADA]">Likes</span>
                                 </div>
                             </div>
 
                             <div className="w-full flex text-[#DADADA] text-sm mt-2">
-                                <span>No bio yet</span>
+                                <span>{bio ? bio : 'No bio yet'}</span>
                             </div>
 
                             <div className="w-full flex text-sm mt-3">
-                                <button className="bg-[#FF3B5C] w-28 p-3 rounded-lg mr-3">Edit Profile</button>
+                                <button className="bg-[#FF3B5C] w-28 p-3 rounded-lg mr-3">
+                                    <h2 className="text-white">Edit Profile</h2>
+                                </button>
                                 <button className="bg-[#1E1E1E] w-11  p-3 rounded-lg mr-3">
                                     <svg width="21" height="22" viewBox="0 0 21 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M19.7352 8.7347H18.9031C18.2243 8.7347 17.655 8.12184 17.655 7.39443C17.655 7.02786 17.8028 6.69565 18.0655 6.44936L18.602 5.89951C19.1331 5.34965 19.1331 4.4504 18.602 3.90055L17.3812 2.63473C17.1404 2.38271 16.7845 2.23379 16.4232 2.23379C16.0619 2.23379 15.7116 2.38271 15.4652 2.63473L14.9506 3.17313C14.7043 3.45952 14.3758 3.61416 14.02 3.61416C13.3192 3.61416 12.7335 3.01848 12.7335 2.31398V1.43765C12.7335 0.66441 12.1368 0 11.3922 0H9.72802C8.98351 0 8.39227 0.658682 8.39227 1.43765V2.30825C8.39227 3.01276 7.80651 3.60844 7.10578 3.60844C6.75542 3.60844 6.43243 3.45379 6.19703 3.18459L5.66601 2.63473C5.42514 2.37699 5.0693 2.23379 4.70799 2.23379C4.34668 2.23379 3.99632 2.38271 3.74997 2.63473L2.51823 3.89482C1.99268 4.44468 1.99268 5.34392 2.51823 5.88805L3.03282 6.42645C3.30654 6.6842 3.45983 7.02786 3.45983 7.39443C3.45983 8.12757 2.89049 8.7347 2.21166 8.7347H1.37955C0.629557 8.7347 0 9.34757 0 10.1265V10.9971V11.8677C0 12.641 0.629557 13.2596 1.37955 13.2596H2.21166C2.89049 13.2596 3.45983 13.8724 3.45983 14.5998C3.45983 14.9664 3.30654 15.3101 3.03282 15.5678L2.51823 16.1005C1.99268 16.6504 1.99268 17.5496 2.51823 18.0937L3.73902 19.3653C3.9799 19.623 4.33573 19.7662 4.69704 19.7662C5.05835 19.7662 5.40872 19.6173 5.65506 19.3653L6.18608 18.8154C6.41601 18.5462 6.74447 18.3916 7.09483 18.3916C7.79556 18.3916 8.38132 18.9872 8.38132 19.6917V20.5624C8.38132 21.3356 8.97256 22 9.72255 22H11.3868C12.1313 22 12.7225 21.3413 12.7225 20.5624V19.6917C12.7225 18.9872 13.3083 18.3916 14.009 18.3916C14.3594 18.3916 14.6878 18.5519 14.9397 18.8326L15.4543 19.371C15.7006 19.623 16.051 19.7719 16.4123 19.7719C16.7736 19.7719 17.124 19.623 17.3703 19.371L18.5911 18.0995C19.1166 17.5496 19.1166 16.6504 18.5911 16.1005L18.0546 15.5506C17.7918 15.3043 17.644 14.9664 17.644 14.6056C17.644 13.8724 18.2134 13.2653 18.8922 13.2653H19.7243C20.4688 13.2653 20.9998 12.6524 20.9998 11.8735V10.9971V10.1265C21.0108 9.34757 20.4798 8.7347 19.7352 8.7347ZM14.9342 10.9971C14.9342 13.523 12.9798 15.5793 10.5547 15.5793C8.1295 15.5793 6.17513 13.523 6.17513 10.9971C6.17513 8.47123 8.1295 6.415 10.5547 6.415C12.9798 6.415 14.9342 8.47123 14.9342 10.9971Z" fill="#DADADA"/>
@@ -422,7 +497,7 @@ const ProfilePage: React.FC = () =>{
                         </div>
                     </div>
 
-                    <div ref={containerRef} className="w-full h-24 bg-[#181818] items-center justify-start flex relative">
+                    <div ref={containerRef} className="bar w-full h-32 items-center justify-start flex relative">
                         <div className="text-[#BDBDBD] w-full flex justify-start items-center text-center relative">
                             <button
                             ref={videoButtonRef}
@@ -483,8 +558,11 @@ const ProfilePage: React.FC = () =>{
 
 
 
-                    <div className="w-full h-full">
-                        <h1>konten</h1>
+                    <div className="w-full h-full flex flex-wrap items-center justify-start gap-3 pt-5">
+                        <button className="w-64 h-80 bg-[#4A4A4A] rounded-md items-start justify-end flex flex-col pl-2 pr-2 pb-2">
+                            <h2 className="text-sm font-bold text-white">First Tiktok Clone Video</h2>
+                            <h2 className="text-white">First Tiktok Clone Video</h2>
+                        </button>
                     </div>
 
                 </div>

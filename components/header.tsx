@@ -50,7 +50,7 @@ interface HeaderProps {
             </header>
 
             {/*     Mobile Header    */}
-            <header className="fixed w-full h-16 items-center flex p-3 md:hidden z-10">
+            <header className="fixed w-full h-16 items-center flex p-3 md:hidden z-10 text-white">
                 <div className="w-full flex items-center justify-between p-2">
                     <div>
                         <div>
