@@ -1,10 +1,8 @@
 import next from "next";
 import Image from "next/image";
 import Link from "next/link";
-import LoginComponent from '@/components/Mobile/login';
 import { useUserSession } from '@/hooks/use-user-session';
-import { onAuthStateChanged,getUserRoles , signInWithGoogle, signOutWithGoogle } from '@/libs/firebase/auth';
-import { User } from 'firebase/auth';
+import { signInWithGoogle, signOutWithGoogle } from '@/libs/firebase/auth';
 import { createSession, removeSession } from '@/actions/auth-actions';
 
 interface IndexHomePageProps {
@@ -34,12 +32,12 @@ interface IndexHomePageProps {
                     <Link href="/home" passHref>
                         <div className="flex items-center w-full h-10 mb-5 hover:text-red">
                             <div className="w-8 justify-center flex items-center">
-                                <svg width="29" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg className="w-7" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12.6867 0.0982985L0.114698 12.0156C-0.123481 12.241 0.0340921 12.6458 0.359638 12.6458H2.46112C2.65926 12.6458 2.81995 12.8089 2.81995 13.01V23.6358C2.81995 23.8369 2.98065 24 3.17878 24H11.3726C11.5707 24 11.7314 23.8369 11.7314 23.6358V16.4305C11.7314 16.2295 11.8921 16.0664 12.0902 16.0664H13.6722C13.8703 16.0664 14.031 16.2295 14.031 16.4305V24H22.5893C22.7875 24 22.9482 23.8369 22.9482 23.6358V13.105C22.9482 12.9039 23.1088 12.7408 23.307 12.7408H25.6404C25.9665 12.7408 26.1235 12.3355 25.8848 12.1101L13.175 0.0977718C13.0372 -0.0325906 12.8235 -0.0325906 12.6857 0.0977718L12.6867 0.0982985Z" fill="#FF3B5C"/>
                                 </svg>
                             </div>
                             <div className="w-full flex items-center text-center ml-3">
-                                <h1 className="text-xl items-center justify-center">For You</h1>
+                                <h1 className="text-xl items-center justify-center text-[#FF3B5C]">For You</h1>
                             </div>
                         </div>  
                     </Link> 
@@ -49,14 +47,14 @@ interface IndexHomePageProps {
                     <a href="#">
                         <div className="flex items-center w-full h-10 mb-5 ">
                             <div className="w-8 justify-center flex items-center">
-                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M14 27C21.1797 27 27 21.1797 27 14C27 6.8203 21.1797 1 14 1C6.8203 1 1 6.8203 1 14C1 21.1797 6.8203 27 14 27Z" stroke="white" stroke-miterlimit="10"/>
-                                    <path d="M10.4328 12.6361L9.16772 20.8826L17.0097 16.2281L18.4265 7.88L10.4328 12.6355V12.6361ZM15.1984 15.1868L11.7787 17.2166L12.3303 13.6208L15.8161 11.5471L15.1984 15.1873V15.1868Z" fill="white"/>
+                                <svg className="w-7" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path className="ostroke" d="M14 27C21.1797 27 27 21.1797 27 14C27 6.8203 21.1797 1 14 1C6.8203 1 1 6.8203 1 14C1 21.1797 6.8203 27 14 27Z" stroke-miterlimit="10"/>
+                                    <path className="ofill" d="M10.4328 12.6361L9.16772 20.8826L17.0097 16.2281L18.4265 7.88L10.4328 12.6355V12.6361ZM15.1984 15.1868L11.7787 17.2166L12.3303 13.6208L15.8161 11.5471L15.1984 15.1873V15.1868Z"/>
                                 </svg>
                             </div>
                             <div className="w-full flex items-center text-center ml-3">
-                                <h1 className="text-xl items-center justify-center">Explore</h1>
-                                <span className="text-sm w-14 rounded-xl bg-red-700 ml-2 hover:text-white text-white">New</span>
+                                <h1 className="thover text-xl items-center justify-center">Explore</h1>
+                                <h2 className="text-sm w-14 rounded-xl bg-red-700 ml-2 text-white">New</h2>
                             </div>
                         </div> 
                     </a>
@@ -66,12 +64,12 @@ interface IndexHomePageProps {
                     <a href="#">
                         <div className="flex items-center w-full h-10 mb-5 ">
                             <div className="w-8 justify-center flex items-center">
-                                <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1.00785 27C1.00785 27 0.234125 17.168 14.048 17.168M20.3698 17.72L15.5104 22.5228M15.5104 22.5228L20.1528 26.9528M15.5104 22.5228L28.4939 22.4001M16.9353 6.65197C16.9353 9.77347 14.4048 12.3039 11.2833 12.3039C8.1618 12.3039 5.63133 9.77347 5.63133 6.65197C5.63133 3.53047 8.1618 1 11.2833 1C14.4048 1 16.9353 3.53047 16.9353 6.65197Z" stroke="white" stroke-miterlimit="10"/>
+                                <svg className="w-7" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path className="ostroke" d="M1.00785 27C1.00785 27 0.234125 17.168 14.048 17.168M20.3698 17.72L15.5104 22.5228M15.5104 22.5228L20.1528 26.9528M15.5104 22.5228L28.4939 22.4001M16.9353 6.65197C16.9353 9.77347 14.4048 12.3039 11.2833 12.3039C8.1618 12.3039 5.63133 9.77347 5.63133 6.65197C5.63133 3.53047 8.1618 1 11.2833 1C14.4048 1 16.9353 3.53047 16.9353 6.65197Z" stroke-miterlimit="10"/>
                                 </svg>
                             </div>
                             <div className="w-full flex items-center text-center ml-3">
-                                <h1 className="text-xl items-center justify-center">Following</h1>
+                                <h1 className="thover text-xl items-center justify-center">Following</h1>
                             </div>
                         </div>  
                     </a>
@@ -81,12 +79,12 @@ interface IndexHomePageProps {
                     <Link href="/profile">
                         <div className="flex items-center w-full h-10 mb-3 ">
                             <div className="w-8 justify-center flex items-center">
-                                <svg width="28" height="25" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 24.0264C1 24.0264 2.08901 16.3206 10.2027 16.3206C18.3164 16.3206 19.0087 24.0264 19.0087 24.0264M31.0001 24.0264C31.0001 24.0264 29.4036 18.2689 24.1413 18.2689C18.8791 18.2689 17.7987 20.4285 17.7987 20.4285M15.7871 6.58441C15.7871 9.6686 13.2869 12.1688 10.2027 12.1688C7.11853 12.1688 4.6183 9.6686 4.6183 6.58441C4.6183 3.50023 7.11853 1 10.2027 1C13.2869 1 15.7871 3.50023 15.7871 6.58441ZM27.7933 10.2364C27.7933 12.2533 26.1582 13.8884 24.1413 13.8884C22.1244 13.8884 20.4893 12.2533 20.4893 10.2364C20.4893 8.21946 22.1244 6.58441 24.1413 6.58441C26.1582 6.58441 27.7933 8.21946 27.7933 10.2364Z" stroke="white" stroke-miterlimit="10"/>
+                                <svg className="w-7" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path className="ostroke" d="M1 24.0264C1 24.0264 2.08901 16.3206 10.2027 16.3206C18.3164 16.3206 19.0087 24.0264 19.0087 24.0264M31.0001 24.0264C31.0001 24.0264 29.4036 18.2689 24.1413 18.2689C18.8791 18.2689 17.7987 20.4285 17.7987 20.4285M15.7871 6.58441C15.7871 9.6686 13.2869 12.1688 10.2027 12.1688C7.11853 12.1688 4.6183 9.6686 4.6183 6.58441C4.6183 3.50023 7.11853 1 10.2027 1C13.2869 1 15.7871 3.50023 15.7871 6.58441ZM27.7933 10.2364C27.7933 12.2533 26.1582 13.8884 24.1413 13.8884C22.1244 13.8884 20.4893 12.2533 20.4893 10.2364C20.4893 8.21946 22.1244 6.58441 24.1413 6.58441C26.1582 6.58441 27.7933 8.21946 27.7933 10.2364Z" stroke-miterlimit="10"/>
                                 </svg>
                             </div>
                             <div className="w-full flex items-center text-center ml-3">
-                                <h1 className="text-xl items-center justify-center">Friends</h1>
+                                <h1 className="thover text-xl items-center justify-center">Friends</h1>
                             </div>
                         </div>  
                     </Link>
@@ -96,13 +94,13 @@ interface IndexHomePageProps {
                     <a href="#">
                         <div className="flex items-center w-full h-10 mb-5 ">
                             <div className="w-8 justify-center flex items-center">
-                                <svg width="28" height="21" viewBox="0 0 32 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 16.9439V20.1004C1 20.3211 1.17861 20.4997 1.39932 20.4997H22.4265C22.6472 20.4997 22.8258 20.3211 22.8258 20.1004V13.0293C22.8258 12.9548 22.9192 12.921 22.967 12.9779L30.6007 17.973C30.8214 17.973 31 17.7944 31 17.5737V3.44414C31 3.22344 30.8214 3.04482 30.6007 3.04482L22.8854 8.47049C22.8397 8.53208 22.7411 8.49974 22.7411 8.42275V1.39932C22.7411 1.17861 22.5625 1 22.3418 1H1.39932C1.17861 1 1 1.17861 1 1.39932V16.9444V16.9439Z" stroke="white" stroke-miterlimit="10"/>
-                                    <path d="M9.79266 6.80907V14.547L16 10.678L9.79266 6.80907Z" fill="white"/>
+                                <svg className="w-7" viewBox="0 0 32 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path className="ostroke" d="M1 16.9439V20.1004C1 20.3211 1.17861 20.4997 1.39932 20.4997H22.4265C22.6472 20.4997 22.8258 20.3211 22.8258 20.1004V13.0293C22.8258 12.9548 22.9192 12.921 22.967 12.9779L30.6007 17.973C30.8214 17.973 31 17.7944 31 17.5737V3.44414C31 3.22344 30.8214 3.04482 30.6007 3.04482L22.8854 8.47049C22.8397 8.53208 22.7411 8.49974 22.7411 8.42275V1.39932C22.7411 1.17861 22.5625 1 22.3418 1H1.39932C1.17861 1 1 1.17861 1 1.39932V16.9444V16.9439Z" stroke-miterlimit="10"/>
+                                    <path className="ofill" d="M9.79266 6.80907V14.547L16 10.678L9.79266 6.80907Z"/>
                                 </svg>
                             </div>
                             <div className="w-full flex items-center text-center ml-3">
-                                <h1 className="text-xl items-center justify-center">Live</h1>
+                                <h1 className="thover text-xl items-center justify-center">Live</h1>
                             </div>
                         </div>  
                     </a>
@@ -111,11 +109,11 @@ interface IndexHomePageProps {
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
                     <Link href="/profile">
                         <div className="flex items-center w-full h-10 "> 
-                            <div className="w-8 h-6 bg-white rounded-full justify-center flex items-center">
+                            <div className="w-8 h-6 bg-slate-300 rounded-full justify-center flex items-center">
 
                             </div>
                             <div className="w-full flex items-center text-center ml-3">
-                                <h1 className="text-xl items-center justify-center">Profile</h1>
+                                <h1 className="thover text-xl items-center justify-center">Profile</h1>
                             </div>
                         </div>  
                     </Link>
@@ -327,7 +325,7 @@ interface IndexHomePageProps {
                 </div>
 
                 {/* Container Layout */}
-                <div className="absolute bottom-0 right-0 h-full mr-2 w-11 flex flex-col justify-end mb-4">
+                <div className="absolute bottom-0 right-0 h-full mr-2 w-11 flex flex-col justify-end mb-4 text-white">
                         <div className="w-full h-full flex flex-col justify-end">
                             {/* fitur */}
                             <div className="bg-white rounded-full w-full h-11 mb-2 flex flex-col justify-end right-0 bottom-0 items-center relative">
@@ -345,7 +343,7 @@ interface IndexHomePageProps {
                                         <path d="M14.9508 25.4304C14.5553 25.4314 14.1635 25.3541 13.7979 25.2031C13.4324 25.0521 13.1003 24.8303 12.8208 24.5504L2.52079 14.2504C1.70713 13.4279 1.06528 12.4517 0.632638 11.3787C0.199995 10.3057 -0.0147917 9.15727 0.000791025 8.00041C0.00863074 6.94025 0.22555 5.89205 0.639123 4.91585C1.0527 3.93966 1.6548 3.05465 2.41094 2.31151C3.16708 1.56837 4.0624 0.981714 5.04563 0.585137C6.02885 0.18856 7.08065 -0.0101431 8.14079 0.000408903C9.2199 -0.0104609 10.2902 0.195485 11.2882 0.606032C12.2863 1.01658 13.1917 1.62337 13.9508 2.39041L14.9508 3.39041L15.7708 2.57041C17.1867 1.11698 19.0814 0.225922 21.1039 0.0622833C23.1264 -0.101355 25.1396 0.473512 26.7708 1.68041C27.6993 2.39546 28.4648 3.30013 29.0164 4.33417C29.5679 5.36821 29.8928 6.5079 29.9695 7.67733C30.0461 8.84676 29.8727 10.0191 29.4608 11.1163C29.049 12.2135 28.4081 13.2103 27.5808 14.0404L17.0808 24.5504C16.8013 24.8303 16.4692 25.0521 16.1037 25.2031C15.7381 25.3541 15.3463 25.4314 14.9508 25.4304Z" fill="white"/>
                                     </svg>
                                 </div>
-                                <span className=" inline-block leading-none">80k</span>
+                                <h2 className=" inline-block leading-none">80k</h2>
                             </div>
                             <div className="w-full flex flex-col mt-2">
                                 <div className=" rounded-full w-full h-11 flex items-center justify-center">
@@ -356,7 +354,7 @@ interface IndexHomePageProps {
                                         <path d="M17.1461 11.6429C17.8997 11.6429 18.5106 11.0377 18.5106 10.291C18.5106 9.54439 17.8997 8.93912 17.1461 8.93912C16.3925 8.93912 15.7816 9.54439 15.7816 10.291C15.7816 11.0377 16.3925 11.6429 17.1461 11.6429Z" fill="#231F20"/>
                                     </svg>
                                 </div>
-                                <span className=" inline-block leading-none">80k</span>
+                                <h2 className=" inline-block leading-none">80k</h2>
                             </div>
                             <div className="w-full flex flex-col mt-2">
                                 <div className=" rounded-full w-full h-11 flex items-center justify-center">
@@ -364,7 +362,7 @@ interface IndexHomePageProps {
                                         <path d="M9.02767 17.7554H11.1299L17.0214 22.3394C17.3445 22.5907 17.7402 22.7268 18.1478 22.7268C19.1703 22.7268 19.9985 21.8885 19.9975 20.8522C19.99 15.4108 19.9716 0 20 0C20.0343 0 0 0 0 0V20.8527C0 21.888 0.828155 22.7273 1.84968 22.7273H1.8964C2.29805 22.7273 2.68827 22.5948 3.00889 22.3499L9.02817 17.7554H9.02767Z" fill="white"/>
                                     </svg>
                                 </div>
-                                <span className=" inline-block leading-none">80k</span>
+                                <h2 className=" inline-block leading-none">80k</h2>
                             </div>
                             <div className="w-full flex flex-col mt-2">
                                 <div className=" rounded-full w-full h-11 flex items-center justify-center">
@@ -372,7 +370,7 @@ interface IndexHomePageProps {
                                         <path d="M8.49569 17.3381H15.974L16.0183 23.015L29 11.9696L15.9303 0V5.06086C15.9303 5.06086 0 3.3005 0 22.0033L3.21667 19.2755C4.69171 18.0249 6.56246 17.3387 8.49621 17.3387L8.49569 17.3381Z" fill="white"/>
                                     </svg>
                                 </div>
-                                <span className="inline-block leading-none">80k</span>
+                                <h2 className="inline-block leading-none">80k</h2>
                             </div>
                         </div>
                     </div>

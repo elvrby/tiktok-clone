@@ -12,48 +12,97 @@ body{
   background-color: black;
 }
 
+
 body.dark-theme {
   background-color: #000000; /* Dark mode background */
   color: #ffffff; /* Dark mode text color */
+  transition: background-color 0.3s ease;
 }
 
 body.dark-theme header {
+  transition: background-color 0.3s ease;
   background-color: #1E1E1E; /* Dark mode header background */
 }
 body.dark-theme input {
   background-color: #1E1E1E; /* Dark mode header background */
+  transition: background-color 0.3s ease;
 }
 
 body.dark-theme .bar {
   background-color: #1E1E1E; /* Default light theme */
-  transition: background-color 0.3s ease; /* Smooth transition for theme change */
+  transition: background-color 0.3s ease;
+}
+
+/*    SVG     */
+body.dark-theme .ofill{
+  fill: white;
+  transition: background-color 0.3s ease;
+}
+body.dark-theme .ofillre{
+  fill: black;
+  transition: background-color 0.3s ease;
+}
+body.dark-theme .bgfillm{
+  background-color: dark;
+  transition: background-color 0.3s ease;
+}
+body.dark-theme .ostroke{
+  stroke: white;
+  transition: background-color 0.3s ease;
 }
 
 /* Light theme */
 body.light-theme {
   background-color: #F3F3F3; /* Light mode background */
   color: #000000; /* Light mode text color */
+  transition: background-color 0.3s ease;
 }
 
 body.light-theme header {
   background-color: white; /* Light mode header background */
   color: #000000;
+  transition: background-color 0.3s ease;
 }
 body.light-theme input {
   background-color: #EAEAEA; /* Light mode header background */
   color: #000000;
+  transition: background-color 0.3s ease;
 }
 body.light-theme span {
   color: #000000;
+  transition: background-color 0.3s ease;
 }
 body.light-theme a {
   color: #000000;
+  transition: background-color 0.3s ease;
 }
 
 /* Base sidebar styles */
 body.light-theme .bar {
   background-color: white; /* Default light theme */
-  transition: background-color 0.3s ease; /* Smooth transition for theme change */
+  transition: background-color 0.3s ease;
+}
+
+/*    SVG     */
+body.light-theme .ofill{
+  fill: black;
+  transition: background-color 0.3s ease;
+}
+body.light-theme .ofillre{
+  fill: white;
+  transition: background-color 0.3s ease;
+}
+body.light-theme .bgfillm{
+  background-color: white;
+  transition: background-color 0.3s ease;
+}
+body.light-theme .ostroke{
+  stroke: black;
+  transition: background-color 0.3s ease;
+}
+
+body.light-theme .thover:hover{
+  color: #FF3B5C;
 }
 
 

@@ -181,7 +181,7 @@
             </header>
 
             {/*     Mobile Header    */}
-            <header className="fixed w-full h-16 items-center flex p-3 md:hidden z-10">
+            <div className="fixed w-full h-16 items-center flex p-3 md:hidden z-10">
                 <div className="w-full flex items-center justify-between p-2">
                     <div>
                         <div>
@@ -204,7 +204,7 @@
                             <h1 className="text-[#DADADA]">Following</h1>
                         </div>
                         <div className="flex flex-col items-center">
-                            <h1 className="font-bold">For You</h1>
+                            <h2 className="font-bold text-white">For You</h2>
                             {/* Line */}
                             <div className="w-8 bg-white h-[2px]"></div>
                         </div>
@@ -221,7 +221,7 @@
                         </div>
                     </div>
                 </div>
-            </header>
+            </div>
         </main>
     );
 }
