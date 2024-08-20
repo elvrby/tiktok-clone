@@ -1,7 +1,29 @@
 import next from "next";
 import Link from "next/link";
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { firebaseAuth } from '../../libs/firebase/config'
+import { getUserData } from '@/libs/firebase/auth';
+import { useState, useEffect } from 'react';
 
 const FooterMobileHome: React.FC = () => {
+    const [user, setUser] = useState<User | null>(null);
+    const [userData, setUserData] = useState<any>(null);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(firebaseAuth, async (authUser) => {
+          setUser(authUser);
+          if (authUser) {
+            try {
+              const data = await getUserData(authUser.uid); // Gunakan UID
+              setUserData(data);
+            } catch (error) {
+              console.error('Error fetching user data:', error);
+            }
+          }
+        });
+    
+        return () => unsubscribe(); // Clean up the subscription on unmount
+      }, []);  
     return (
         <footer className="bgfillm fixed bottom-0 left-0 w-full pl-1 pb-2 pr-1 pt-3 flex justify-around items-center md:hidden text-[9px]">
             <div className="flex w-full justify-between">
@@ -44,7 +66,7 @@ const FooterMobileHome: React.FC = () => {
                 </div>
                 </Link>
 
-                <Link href="/profile" passHref className="text-center flex flex-col items-center flex-1">
+                <Link href={`/profile/${userData?.username}`} passHref className="text-center flex flex-col items-center flex-1">
                     <div className="text-center flex flex-col items-center flex-1">
                         <svg className="w-6 h-6" viewBox="0 0 23 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path className="ostroke" d="M1 31C1 31 1.70315 20.1955 11.485 20.1955C21.2668 20.1955 22.3535 31 22.3535 31M19.1432 7.85658C19.1432 11.6434 16.0734 14.7132 12.2866 14.7132C8.49986 14.7132 5.43006 11.6434 5.43006 7.85658C5.43006 4.06979 8.49986 1 12.2866 1C16.0734 1 19.1432 4.06979 19.1432 7.85658Z" stroke="white" stroke-miterlimit="10" />

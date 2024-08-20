@@ -238,7 +238,7 @@ const ProfilePage: React.FC = () =>{
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
-                    <a href="#">
+                    <a href="">
                         <div className="flex items-center w-full h-10 mb-5 ">
                             <div className="w-8 justify-center flex items-center">
                                 <svg className="w-7" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -253,7 +253,7 @@ const ProfilePage: React.FC = () =>{
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
-                    <Link href="/profile">
+                    <Link href="">
                         <div className="flex items-center w-full h-10 mb-3 ">
                             <div className="w-8 justify-center flex items-center">
                                 <svg className="w-7" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -284,7 +284,7 @@ const ProfilePage: React.FC = () =>{
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
-                    <a href="#">
+                    <a href="">
                         <div className="flex items-center w-full h-10 "> 
                             <div className="w-8 h-6 bg-[#FF3B5C] rounded-full justify-center flex items-center">
 
@@ -383,7 +383,7 @@ const ProfilePage: React.FC = () =>{
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
-                    <Link href="/profile">
+                    <Link href="">
                         <div className="flex items-center w-full h-10 mb-3 ">
                             <div className="w-8 justify-center flex items-center">
                                 <svg width="28" height="25" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -423,7 +423,7 @@ const ProfilePage: React.FC = () =>{
 
             {/* Main Konten */}
             <div className="w-full h-full overflow-y-auto flex-wrap text-center items-start justify-center hidden md:flex no-scrollbar">
-                <div className="w-full h-3/4 p-6 flex flex-col">
+                <div className="w-full h-4/5 p-6 flex flex-col">
                     <div className="w-full h-full flex items-start">
                         <div className="w-60 h-60 bg-white rounded-full">
 
@@ -471,7 +471,7 @@ const ProfilePage: React.FC = () =>{
                         </div>
                     </div>
 
-                    <div ref={containerRef} className="bar w-full h-32 items-center justify-start flex relative">
+                    <div ref={containerRef} className="bar w-full h-40 items-center justify-start flex relative">
                         <div className="text-[#BDBDBD] w-full flex justify-start items-center text-center relative">
                             <button
                             ref={videoButtonRef}

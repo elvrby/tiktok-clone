@@ -1,9 +1,13 @@
 import next from "next";
+import { useState, useEffect } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import { useUserSession } from '@/hooks/use-user-session';
-import { signInWithGoogle, signOutWithGoogle } from '@/libs/firebase/auth';
+import { signInWithGoogle, signOutWithGoogle,getUserData } from '@/libs/firebase/auth';
 import { createSession, removeSession } from '@/actions/auth-actions';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { firebaseAuth, firebaseFirestore } from '../../libs/firebase/config';
+
 
 interface IndexHomePageProps {
     session: string | null;
@@ -11,6 +15,8 @@ interface IndexHomePageProps {
 
   export function IndexHome ({session}: IndexHomePageProps){
     const userSessionId = useUserSession(session);
+    const [user, setUser] = useState<User | null>(null);
+    const [userData, setUserData] = useState<any>(null);
     const handleSignIn = async () => {
         const userUid = await signInWithGoogle();
         if (userUid) {
@@ -22,6 +28,23 @@ interface IndexHomePageProps {
         await signOutWithGoogle();
         await removeSession();
       };
+
+      useEffect(() => {
+        const unsubscribe = onAuthStateChanged(firebaseAuth, async (authUser) => {
+          setUser(authUser);
+          if (authUser) {
+            try {
+              const data = await getUserData(authUser.uid); // Gunakan UID
+              setUserData(data);
+            } catch (error) {
+              console.error('Error fetching user data:', error);
+            }
+          }
+        });
+    
+        return () => unsubscribe(); // Clean up the subscription on unmount
+      }, []);  
+      
     return(
         <main className="flex justify-between w-full h-[calc(100vh-4rem)]">
 
@@ -76,7 +99,7 @@ interface IndexHomePageProps {
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
-                    <Link href="/profile">
+                    <Link href="#">
                         <div className="flex items-center w-full h-10 mb-3 ">
                             <div className="w-8 justify-center flex items-center">
                                 <svg className="w-7" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -107,7 +130,7 @@ interface IndexHomePageProps {
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
-                    <Link href="/profile">
+                    <Link href={`/profile/${userData?.username}`} passHref>
                         <div className="flex items-center w-full h-10 "> 
                             <div className="w-8 h-6 bg-slate-300 rounded-full justify-center flex items-center">
 
@@ -231,7 +254,7 @@ interface IndexHomePageProps {
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
-                    <Link href="/profile">
+                    <Link href={`/profile/${userData?.username}`} passHref>
                         <div className="flex items-center w-full h-10 "> 
                             <div className="w-8 h-8 bg-slate-300 rounded-full justify-center flex items-center">
 
