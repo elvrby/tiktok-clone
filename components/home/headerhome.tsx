@@ -1,76 +1,79 @@
-    "use client"
-    import { useState, useEffect } from 'react';
-    import { getUserData, signOutWithGoogle } from '../../libs/firebase/auth';
-    import { firebaseAuth, firebaseFirestore } from '../../libs/firebase/config';
-    import { removeSession } from '@/actions/auth-actions';
-    import { doc, updateDoc } from 'firebase/firestore';
-    import { onAuthStateChanged, User } from 'firebase/auth';
-    import Link from "next/link";
+"use client"
+import { useState, useEffect } from 'react';
+import { getUserData, signOutWithGoogle } from '../../libs/firebase/auth';
+import { firebaseAuth, firebaseFirestore } from '../../libs/firebase/config';
+import { removeSession } from '@/actions/auth-actions';
+import { doc, updateDoc } from 'firebase/firestore';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import Link from "next/link";
 
+const HeaderHome: React.FC = () => {
+    // Theme
+    const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState<User | null>(null);
+    const [userData, setUserData] = useState<any>(null); // Ubah kembali ke any
 
-    const HeaderHome: React.FC = () => {
-
-        // Theme
-        const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
-
+    
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(firebaseAuth, (authUser) => {
+    const unsubscribe = onAuthStateChanged(firebaseAuth, async (authUser) => {
       setUser(authUser);
       if (authUser) {
-        const fetchTheme = async () => {
-          try {
-            const userData = await getUserData(authUser.uid);
-            if (userData) {
-              const theme = userData.theme === 'dark' ? 'dark' : 'light';
-              setTheme(theme);
-              document.body.className = `${theme}-theme`;
-            }
-          } catch (error) {
-            console.error('Error fetching user data:', error);
-          } finally {
-            setLoading(false);
+        try {
+          const data = await getUserData(authUser.uid); // Gunakan UID
+          setUserData(data);
+          if (data) {
+            const theme = data.theme === 'dark' ? 'dark' : 'light';
+            setTheme(theme);
+            document.body.className = `${theme}-theme`;
           }
-        };
-
-        fetchTheme();
-      } else {
-        setLoading(false);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
       }
+      setLoading(false);
     });
 
     return () => unsubscribe(); // Clean up the subscription on unmount
   }, []);
 
-  const setThemeAndSave = async (newTheme: 'dark' | 'light') => {
-    setTheme(newTheme);
-    document.body.className = `${newTheme}-theme`;
+    const setThemeAndSave = async (newTheme: 'dark' | 'light') => {
+        setTheme(newTheme);
+        document.body.className = `${newTheme}-theme`;
 
-    if (user) {
-      try {
-        await updateDoc(doc(firebaseFirestore, 'users', user.uid), {
-          theme: newTheme,
-        });
-      } catch (error) {
-        console.error('Error updating theme:', error);
-      }
-    }
-  };
-        
-  const handleSignOut = async () => {
-    try {
-        await signOutWithGoogle(); // Sign out the user
-        await removeSession(); // Remove the session
+        if (user && userData) {
+            try {
+                await updateDoc(doc(firebaseFirestore, 'users', user.uid), {
+                    theme: newTheme,
+                });
+            } catch (error) {
+                console.error('Error updating theme:', error);
+            }
+        }
+    };
 
-        window.location.href = '/'; // Redirect to the homepage after logout
-    } catch (error) {
-        console.error('Error signing out:', error);
-        // Handle the error, show a message to the user, etc.
-    }
-};
+    const handleSignOut = async () => {
+        try {
+            await signOutWithGoogle(); // Sign out the user
+            await removeSession(); // Remove the session
 
-  
+            window.location.href = '/'; // Redirect to the homepage after logout
+        } catch (error) {
+            console.error('Error signing out:', error);
+            // Handle the error, show a message to the user, etc.
+        }
+    };
+
+    const [showThemeMenu, setShowThemeMenu] = useState(false);
+
+    const handleDisplayClick = () => {
+        setShowThemeMenu(true);
+    };
+
+    const handleBackClick = () => {
+        setShowThemeMenu(false);
+    };
+
     return (
         <main>
             {/*         Desktop      */}
@@ -139,36 +142,69 @@
                                 {/* Profile */}
                                 <div className="w-8 h-8 rounded-full bg-[#4A4A4A] relative z-10 group text-white">
                                     {/* Floating profile */}
-                                    <div className="absolute right-0 mt-12 w-48 rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out">
-                                        <Link href="" passHref className={`items-center justify-between w-full relative flex px-4 py-2  ${ theme === "dark" ? "hover:bg-[#252525]" : "hover:bg-[#DADADA]"}`}>
+                                    {!showThemeMenu && (
+                                    <div className={`absolute right-0 mt-12 w-48 rounded-md shadow-lg py-1 z-50 transition-all duration-200 ease-in-out 
+                                        ${!showThemeMenu ? 'opacity-0 invisible group-hover:opacity-100 group-hover:visible' : 'opacity-100 visible'}`}>
+                                        <Link href={`/profile/${userData?.username}`} passHref className={`items-center justify-between w-full relative flex px-4 py-2 ${theme === "dark" ? "hover:bg-[#252525]" : "hover:bg-[#DADADA]"}`}>
                                             <svg className="w-4 mr-3" viewBox="0 0 23 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M1 31C1 31 1.70315 20.1955 11.485 20.1955C21.2668 20.1955 22.3535 31 22.3535 31M19.1432 7.85658C19.1432 11.6434 16.0734 14.7132 12.2866 14.7132C8.49986 14.7132 5.43006 11.6434 5.43006 7.85658C5.43006 4.06979 8.49986 1 12.2866 1C16.0734 1 19.1432 4.06979 19.1432 7.85658Z" stroke="white" strokeWidth={2} stroke-miterlimit="10"/>
+                                                <path className='ostroke' d="M1 31C1 31 1.70315 20.1955 11.485 20.1955C21.2668 20.1955 22.3535 31 22.3535 31M19.1432 7.85658C19.1432 11.6434 16.0734 14.7132 12.2866 14.7132C8.49986 14.7132 5.43006 11.6434 5.43006 7.85658C5.43006 4.06979 8.49986 1 12.2866 1C16.0734 1 19.1432 4.06979 19.1432 7.85658Z" stroke="white" strokeWidth={2} stroke-miterlimit="10"/>
                                             </svg>
                                             <span className="w-full">View Profile</span>
                                         </Link>
+                                        
                                         <Link href="" passHref className={`items-center justify-between w-full relative flex px-4 py-2  ${ theme === "dark" ? "hover:bg-[#252525]" : "hover:bg-[#DADADA]"}`}>
                                             <svg className="w-5 mr-3" viewBox="0 0 21 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M19.7352 8.7347H18.9031C18.2243 8.7347 17.655 8.12184 17.655 7.39443C17.655 7.02786 17.8028 6.69565 18.0655 6.44936L18.602 5.89951C19.1331 5.34965 19.1331 4.4504 18.602 3.90055L17.3812 2.63473C17.1404 2.38271 16.7845 2.23379 16.4232 2.23379C16.0619 2.23379 15.7116 2.38271 15.4652 2.63473L14.9506 3.17313C14.7043 3.45952 14.3758 3.61416 14.02 3.61416C13.3192 3.61416 12.7335 3.01848 12.7335 2.31398V1.43765C12.7335 0.66441 12.1368 0 11.3922 0H9.72802C8.98351 0 8.39227 0.658682 8.39227 1.43765V2.30825C8.39227 3.01276 7.80651 3.60844 7.10578 3.60844C6.75542 3.60844 6.43243 3.45379 6.19703 3.18459L5.66601 2.63473C5.42514 2.37699 5.0693 2.23379 4.70799 2.23379C4.34668 2.23379 3.99632 2.38271 3.74997 2.63473L2.51823 3.89482C1.99268 4.44468 1.99268 5.34392 2.51823 5.88805L3.03282 6.42645C3.30654 6.6842 3.45983 7.02786 3.45983 7.39443C3.45983 8.12757 2.89049 8.7347 2.21166 8.7347H1.37955C0.629557 8.7347 0 9.34757 0 10.1265V10.9971V11.8677C0 12.641 0.629557 13.2596 1.37955 13.2596H2.21166C2.89049 13.2596 3.45983 13.8724 3.45983 14.5998C3.45983 14.9664 3.30654 15.3101 3.03282 15.5678L2.51823 16.1005C1.99268 16.6504 1.99268 17.5496 2.51823 18.0937L3.73902 19.3653C3.9799 19.623 4.33573 19.7662 4.69704 19.7662C5.05835 19.7662 5.40872 19.6173 5.65506 19.3653L6.18608 18.8154C6.41601 18.5462 6.74447 18.3916 7.09483 18.3916C7.79556 18.3916 8.38132 18.9872 8.38132 19.6917V20.5624C8.38132 21.3356 8.97256 22 9.72255 22H11.3868C12.1313 22 12.7225 21.3413 12.7225 20.5624V19.6917C12.7225 18.9872 13.3083 18.3916 14.009 18.3916C14.3594 18.3916 14.6878 18.5519 14.9397 18.8326L15.4543 19.371C15.7006 19.623 16.051 19.7719 16.4123 19.7719C16.7736 19.7719 17.124 19.623 17.3703 19.371L18.5911 18.0995C19.1166 17.5496 19.1166 16.6504 18.5911 16.1005L18.0546 15.5506C17.7918 15.3043 17.644 14.9664 17.644 14.6056C17.644 13.8724 18.2134 13.2653 18.8922 13.2653H19.7243C20.4688 13.2653 20.9998 12.6524 20.9998 11.8735V10.9971V10.1265C21.0108 9.34757 20.4798 8.7347 19.7352 8.7347ZM14.9342 10.9971C14.9342 13.523 12.9798 15.5793 10.5547 15.5793C8.1295 15.5793 6.17513 13.523 6.17513 10.9971C6.17513 8.47123 8.1295 6.415 10.5547 6.415C12.9798 6.415 14.9342 8.47123 14.9342 10.9971Z" fill="#DADADA"/>
+                                                <path className='ofill' d="M19.7352 8.7347H18.9031C18.2243 8.7347 17.655 8.12184 17.655 7.39443C17.655 7.02786 17.8028 6.69565 18.0655 6.44936L18.602 5.89951C19.1331 5.34965 19.1331 4.4504 18.602 3.90055L17.3812 2.63473C17.1404 2.38271 16.7845 2.23379 16.4232 2.23379C16.0619 2.23379 15.7116 2.38271 15.4652 2.63473L14.9506 3.17313C14.7043 3.45952 14.3758 3.61416 14.02 3.61416C13.3192 3.61416 12.7335 3.01848 12.7335 2.31398V1.43765C12.7335 0.66441 12.1368 0 11.3922 0H9.72802C8.98351 0 8.39227 0.658682 8.39227 1.43765V2.30825C8.39227 3.01276 7.80651 3.60844 7.10578 3.60844C6.75542 3.60844 6.43243 3.45379 6.19703 3.18459L5.66601 2.63473C5.42514 2.37699 5.0693 2.23379 4.70799 2.23379C4.34668 2.23379 3.99632 2.38271 3.74997 2.63473L2.51823 3.89482C1.99268 4.44468 1.99268 5.34392 2.51823 5.88805L3.03282 6.42645C3.30654 6.6842 3.45983 7.02786 3.45983 7.39443C3.45983 8.12757 2.89049 8.7347 2.21166 8.7347H1.37955C0.629557 8.7347 0 9.34757 0 10.1265V10.9971V11.8677C0 12.641 0.629557 13.2596 1.37955 13.2596H2.21166C2.89049 13.2596 3.45983 13.8724 3.45983 14.5998C3.45983 14.9664 3.30654 15.3101 3.03282 15.5678L2.51823 16.1005C1.99268 16.6504 1.99268 17.5496 2.51823 18.0937L3.73902 19.3653C3.9799 19.623 4.33573 19.7662 4.69704 19.7662C5.05835 19.7662 5.40872 19.6173 5.65506 19.3653L6.18608 18.8154C6.41601 18.5462 6.74447 18.3916 7.09483 18.3916C7.79556 18.3916 8.38132 18.9872 8.38132 19.6917V20.5624C8.38132 21.3356 8.97256 22 9.72255 22H11.3868C12.1313 22 12.7225 21.3413 12.7225 20.5624V19.6917C12.7225 18.9872 13.3083 18.3916 14.009 18.3916C14.3594 18.3916 14.6878 18.5519 14.9397 18.8326L15.4543 19.371C15.7006 19.623 16.051 19.7719 16.4123 19.7719C16.7736 19.7719 17.124 19.623 17.3703 19.371L18.5911 18.0995C19.1166 17.5496 19.1166 16.6504 18.5911 16.1005L18.0546 15.5506C17.7918 15.3043 17.644 14.9664 17.644 14.6056C17.644 13.8724 18.2134 13.2653 18.8922 13.2653H19.7243C20.4688 13.2653 20.9998 12.6524 20.9998 11.8735V10.9971V10.1265C21.0108 9.34757 20.4798 8.7347 19.7352 8.7347ZM14.9342 10.9971C14.9342 13.523 12.9798 15.5793 10.5547 15.5793C8.1295 15.5793 6.17513 13.523 6.17513 10.9971C6.17513 8.47123 8.1295 6.415 10.5547 6.415C12.9798 6.415 14.9342 8.47123 14.9342 10.9971Z" fill="#DADADA"/>
                                             </svg>
                                             <span className="w-full">Settings</span>
                                         </Link>
-                                        <button onClick={() => setThemeAndSave('dark')} className={`items-center w-full relative flex px-4 py-2 hover:bg-[#252525] ${ theme === "dark" ? "hover:bg-[#252525]" : "hover:bg-[#DADADA]"}`}>
-                                            <span className="">Darkmode</span>
+
+                                        <button onClick={handleDisplayClick} className={`items-center w-full relative flex px-4 py-2 hover:bg-[#252525] ${ theme === "dark" ? "hover:bg-[#252525]" : "hover:bg-[#DADADA]"}`}>
+                                            <svg className="w-4 mr-3" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path className='ofill' d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20ZM10 18.5V1.5C14.6944 1.5 18.5 5.30558 18.5 10C18.5 14.6944 14.6944 18.5 10 18.5Z" fill="white"/>
+                                            </svg>
+                                            <span>Display</span>
                                         </button>
-                                        <button onClick={() => setThemeAndSave('light')} className={`items-center w-full relative flex px-4 py-2 hover:bg-[#252525] ${ theme === "dark" ? "hover:bg-[#252525]" : "hover:bg-[#DADADA]"}`}>
-                                            <span className="">Light mode</span>
-                                        </button>
+                                        
                                         <button onClick={handleSignOut} className={`items-center w-full relative flex px-4 py-2 hover:bg-[#252525] ${ theme === "dark" ? "hover:bg-[#252525]" : "hover:bg-[#DADADA]"}`}>
                                             <svg className="w-4 mr-3" viewBox="0 0 22 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M6.6 12H21M21 12L17.2 8.19999M21 12L17.2 15.8M10.9 0.799988H3.5C2.1 0.799988 1 1.89999 1 3.19999V20.7C1 22.1 2.1 23.2 3.5 23.2H10.9" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path className='ostroke' d="M6.6 12H21M21 12L17.2 8.19999M21 12L17.2 15.8M10.9 0.799988H3.5C2.1 0.799988 1 1.89999 1 3.19999V20.7C1 22.1 2.1 23.2 3.5 23.2H10.9" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                                             </svg>
 
                                             <span className="">Logout</span>
                                         </button>
-                                        
-
                                     </div>
-                                </div>
+                                    )}
+                                </div> 
+                            
+                                {/* Menu Theme */}
+                                {showThemeMenu && (
+                                    <div className="bgfillm absolute right-0 mt-4 w-48 rounded-md shadow-lg py-1 z-100 flex flex-col">
+                                        <button onClick={handleBackClick} className={`items-center w-full relative flex px-4 py-2 hover:bg-[#252525] ${theme === "dark" ? "hover:bg-[#252525]" : "hover:bg-[#DADADA]"}`}>
+                                            <svg className='ofill w-2.5 mr-4' viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 2.025L9.98125 0L0 10L9.98125 20L12 17.975L4.04375 10L12 2.025Z"/>
+                                            </svg>
+                                            <span>Close</span>
+                                        </button>
+                                        <button onClick={() => setThemeAndSave('dark')} className={`items-center w-full relative flex px-4 py-2 hover:bg-[#252525] ${theme === "dark" ? "hover:bg-[#252525]" : "hover:bg-[#DADADA]"}`}>
+                                            <span className='w-7'>
+                                                {theme === 'dark' && <span className="mr-2">✔️</span>}
+                                            </span>
+                                            <span className="flex items-center">
+                                                Dark mode <span className='text-xs ml-2'>(Default)</span>
+                                            </span>
+                                        </button>
+                                        <button onClick={() => setThemeAndSave('light')} className={`items-center w-full relative flex px-4 py-2 hover:bg-[#252525] ${theme === "dark" ? "hover:bg-[#252525]" : "hover:bg-[#DADADA]"}`}>
+                                            <span className='w-7'>
+                                                {theme === 'light' && <span className="mr-2">✔️</span>}
+                                            </span>
+                                            <span className="flex items-center">
+                                                Light mode
+                                            </span>
+                                        </button>
+                                    </div>
+                                )}
+
                             </div>
 
 

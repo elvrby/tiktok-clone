@@ -6,7 +6,7 @@ import {
   onAuthStateChanged as _onAuthStateChanged,
 } from 'firebase/auth';
 
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, collection, query, where, getDocs, getDoc, setDoc } from 'firebase/firestore';
 import { firebaseAuth, firebaseFirestore } from './config';
 
 export function onAuthStateChanged(callback: (authUser: User | null) => void) {
@@ -87,16 +87,32 @@ export async function getUserRoles(uid: string) {
 
 
 
-export async function getUserData(uid: string) {
+export async function getUserData(identifier: string) {
   try {
-    const userDoc = await getDoc(doc(firebaseFirestore, 'users', uid));
+    // Coba cari berdasarkan UID
+    let userDoc = await getDoc(doc(firebaseFirestore, 'users', identifier));
+    
     if (userDoc.exists()) {
       return userDoc.data();
     } else {
-      throw new Error('No such user!');
+      // Jika tidak ditemukan, cari berdasarkan username
+      const usersCollection = collection(firebaseFirestore, 'users');
+      const q = query(usersCollection, where('username', '==', identifier));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const userDocFromUsername = querySnapshot.docs[0];
+        return userDocFromUsername.data();
+      } else {
+        throw new Error('Pengguna tidak ditemukan');
+      }
     }
   } catch (error) {
-    console.error('Error fetching user data', error);
+    console.error('Error fetching user data:', error);
     return null;
   }
 }
+
+
+
+

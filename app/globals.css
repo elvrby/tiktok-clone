@@ -24,7 +24,7 @@ body.dark-theme header {
   background-color: #1E1E1E; /* Dark mode header background */
 }
 body.dark-theme input {
-  background-color: #1E1E1E; /* Dark mode header background */
+  background-color: #4A4A4A; /* Dark mode header background */
   transition: background-color 0.3s ease;
 }
 
@@ -42,8 +42,12 @@ body.dark-theme .ofillre{
   fill: black;
   transition: background-color 0.3s ease;
 }
+body.dark-theme .bgfill{
+  background-color: white;
+  transition: background-color 0.3s ease;
+}
 body.dark-theme .bgfillm{
-  background-color: dark;
+  background-color: black;
   transition: background-color 0.3s ease;
 }
 body.dark-theme .ostroke{
@@ -90,6 +94,10 @@ body.light-theme .ofill{
 }
 body.light-theme .ofillre{
   fill: white;
+  transition: background-color 0.3s ease;
+}
+body.light-theme .bgfill{
+  background-color: black;
   transition: background-color 0.3s ease;
 }
 body.light-theme .bgfillm{

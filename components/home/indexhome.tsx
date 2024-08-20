@@ -166,7 +166,7 @@ interface IndexHomePageProps {
             </div>
 
             {/*         Side Bar Tablet         */}
-            <div className="w-20 h-full bg-[#1E1E1E] p-5 hidden xl:hidden md:block">
+            <div className="bar w-20 h-full p-5 hidden xl:hidden md:block">
                 {/*     Page Sidebar     */}
                 <div className="Pages-Sidebar block relative font-semibold ml-2">
                     <Link href="/">
@@ -185,8 +185,8 @@ interface IndexHomePageProps {
                         <div className="flex items-center w-full h-10 mb-5 ">
                             <div className="w-8 justify-center flex items-center">
                                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M14 27C21.1797 27 27 21.1797 27 14C27 6.8203 21.1797 1 14 1C6.8203 1 1 6.8203 1 14C1 21.1797 6.8203 27 14 27Z" stroke="white" stroke-miterlimit="10"/>
-                                    <path d="M10.4328 12.6361L9.16772 20.8826L17.0097 16.2281L18.4265 7.88L10.4328 12.6355V12.6361ZM15.1984 15.1868L11.7787 17.2166L12.3303 13.6208L15.8161 11.5471L15.1984 15.1873V15.1868Z" fill="white"/>
+                                    <path className="ostroke" d="M14 27C21.1797 27 27 21.1797 27 14C27 6.8203 21.1797 1 14 1C6.8203 1 1 6.8203 1 14C1 21.1797 6.8203 27 14 27Z" stroke="white" stroke-miterlimit="10"/>
+                                    <path className="ofill" d="M10.4328 12.6361L9.16772 20.8826L17.0097 16.2281L18.4265 7.88L10.4328 12.6355V12.6361ZM15.1984 15.1868L11.7787 17.2166L12.3303 13.6208L15.8161 11.5471L15.1984 15.1873V15.1868Z" fill="white"/>
                                 </svg>
                             </div>
                         </div> 
@@ -198,7 +198,7 @@ interface IndexHomePageProps {
                         <div className="flex items-center w-full h-10 mb-5 ">
                             <div className="w-8 justify-center flex items-center">
                                 <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1.00785 27C1.00785 27 0.234125 17.168 14.048 17.168M20.3698 17.72L15.5104 22.5228M15.5104 22.5228L20.1528 26.9528M15.5104 22.5228L28.4939 22.4001M16.9353 6.65197C16.9353 9.77347 14.4048 12.3039 11.2833 12.3039C8.1618 12.3039 5.63133 9.77347 5.63133 6.65197C5.63133 3.53047 8.1618 1 11.2833 1C14.4048 1 16.9353 3.53047 16.9353 6.65197Z" stroke="white" stroke-miterlimit="10"/>
+                                    <path className="ostroke" d="M1.00785 27C1.00785 27 0.234125 17.168 14.048 17.168M20.3698 17.72L15.5104 22.5228M15.5104 22.5228L20.1528 26.9528M15.5104 22.5228L28.4939 22.4001M16.9353 6.65197C16.9353 9.77347 14.4048 12.3039 11.2833 12.3039C8.1618 12.3039 5.63133 9.77347 5.63133 6.65197C5.63133 3.53047 8.1618 1 11.2833 1C14.4048 1 16.9353 3.53047 16.9353 6.65197Z" stroke="white" stroke-miterlimit="10"/>
                                 </svg>
                             </div>
                         </div>  
@@ -210,7 +210,7 @@ interface IndexHomePageProps {
                         <div className="flex items-center w-full h-10 mb-3 ">
                             <div className="w-8 justify-center flex items-center">
                                 <svg width="28" height="25" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 24.0264C1 24.0264 2.08901 16.3206 10.2027 16.3206C18.3164 16.3206 19.0087 24.0264 19.0087 24.0264M31.0001 24.0264C31.0001 24.0264 29.4036 18.2689 24.1413 18.2689C18.8791 18.2689 17.7987 20.4285 17.7987 20.4285M15.7871 6.58441C15.7871 9.6686 13.2869 12.1688 10.2027 12.1688C7.11853 12.1688 4.6183 9.6686 4.6183 6.58441C4.6183 3.50023 7.11853 1 10.2027 1C13.2869 1 15.7871 3.50023 15.7871 6.58441ZM27.7933 10.2364C27.7933 12.2533 26.1582 13.8884 24.1413 13.8884C22.1244 13.8884 20.4893 12.2533 20.4893 10.2364C20.4893 8.21946 22.1244 6.58441 24.1413 6.58441C26.1582 6.58441 27.7933 8.21946 27.7933 10.2364Z" stroke="white" stroke-miterlimit="10"/>
+                                    <path className="ostroke" d="M1 24.0264C1 24.0264 2.08901 16.3206 10.2027 16.3206C18.3164 16.3206 19.0087 24.0264 19.0087 24.0264M31.0001 24.0264C31.0001 24.0264 29.4036 18.2689 24.1413 18.2689C18.8791 18.2689 17.7987 20.4285 17.7987 20.4285M15.7871 6.58441C15.7871 9.6686 13.2869 12.1688 10.2027 12.1688C7.11853 12.1688 4.6183 9.6686 4.6183 6.58441C4.6183 3.50023 7.11853 1 10.2027 1C13.2869 1 15.7871 3.50023 15.7871 6.58441ZM27.7933 10.2364C27.7933 12.2533 26.1582 13.8884 24.1413 13.8884C22.1244 13.8884 20.4893 12.2533 20.4893 10.2364C20.4893 8.21946 22.1244 6.58441 24.1413 6.58441C26.1582 6.58441 27.7933 8.21946 27.7933 10.2364Z" stroke="white" stroke-miterlimit="10"/>
                                 </svg>
                             </div>
                         </div>  
@@ -222,8 +222,8 @@ interface IndexHomePageProps {
                         <div className="flex items-center w-full h-10 mb-5 ">
                             <div className="w-8 justify-center flex items-center">
                                 <svg width="28" height="21" viewBox="0 0 32 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 16.9439V20.1004C1 20.3211 1.17861 20.4997 1.39932 20.4997H22.4265C22.6472 20.4997 22.8258 20.3211 22.8258 20.1004V13.0293C22.8258 12.9548 22.9192 12.921 22.967 12.9779L30.6007 17.973C30.8214 17.973 31 17.7944 31 17.5737V3.44414C31 3.22344 30.8214 3.04482 30.6007 3.04482L22.8854 8.47049C22.8397 8.53208 22.7411 8.49974 22.7411 8.42275V1.39932C22.7411 1.17861 22.5625 1 22.3418 1H1.39932C1.17861 1 1 1.17861 1 1.39932V16.9444V16.9439Z" stroke="white" stroke-miterlimit="10"/>
-                                    <path d="M9.79266 6.80907V14.547L16 10.678L9.79266 6.80907Z" fill="white"/>
+                                    <path className="ostroke" d="M1 16.9439V20.1004C1 20.3211 1.17861 20.4997 1.39932 20.4997H22.4265C22.6472 20.4997 22.8258 20.3211 22.8258 20.1004V13.0293C22.8258 12.9548 22.9192 12.921 22.967 12.9779L30.6007 17.973C30.8214 17.973 31 17.7944 31 17.5737V3.44414C31 3.22344 30.8214 3.04482 30.6007 3.04482L22.8854 8.47049C22.8397 8.53208 22.7411 8.49974 22.7411 8.42275V1.39932C22.7411 1.17861 22.5625 1 22.3418 1H1.39932C1.17861 1 1 1.17861 1 1.39932V16.9444V16.9439Z" stroke="white" stroke-miterlimit="10"/>
+                                    <path className="ofill" d="M9.79266 6.80907V14.547L16 10.678L9.79266 6.80907Z" fill="white"/>
                                 </svg>
                             </div>
                         </div>  
@@ -233,7 +233,7 @@ interface IndexHomePageProps {
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
                     <Link href="/profile">
                         <div className="flex items-center w-full h-10 "> 
-                            <div className="w-8 h-8 bg-white rounded-full justify-center flex items-center">
+                            <div className="w-8 h-8 bg-slate-300 rounded-full justify-center flex items-center">
 
                             </div>
                         </div>  
