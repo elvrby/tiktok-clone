@@ -27,6 +27,9 @@ body.dark-theme input {
   background-color: #4A4A4A; /* Dark mode header background */
   transition: background-color 0.3s ease;
 }
+body.dark-theme textarea{
+  background-color:#4d4d4d;
+}
 
 body.dark-theme .bar {
   background-color: #1E1E1E; /* Default light theme */

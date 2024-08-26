@@ -66,7 +66,7 @@ const FooterMobileHome: React.FC = () => {
                 </div>
                 </Link>
 
-                <Link href={`/profile/${userData?.username}`} passHref className="text-center flex flex-col items-center flex-1">
+                <Link href={`/${userData?.username}`} passHref className="text-center flex flex-col items-center flex-1">
                     <div className="text-center flex flex-col items-center flex-1">
                         <svg className="w-6 h-6" viewBox="0 0 23 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path className="ostroke" d="M1 31C1 31 1.70315 20.1955 11.485 20.1955C21.2668 20.1955 22.3535 31 22.3535 31M19.1432 7.85658C19.1432 11.6434 16.0734 14.7132 12.2866 14.7132C8.49986 14.7132 5.43006 11.6434 5.43006 7.85658C5.43006 4.06979 8.49986 1 12.2866 1C16.0734 1 19.1432 4.06979 19.1432 7.85658Z" stroke="white" stroke-miterlimit="10" />

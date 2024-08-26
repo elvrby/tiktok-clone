@@ -145,7 +145,7 @@ const HeaderHome: React.FC = () => {
                                     {!showThemeMenu && (
                                     <div className={`absolute right-0 mt-12 w-48 rounded-md shadow-lg py-1 z-50 transition-all duration-200 ease-in-out 
                                         ${!showThemeMenu ? 'opacity-0 invisible group-hover:opacity-100 group-hover:visible' : 'opacity-100 visible'}`}>
-                                        <Link href={`/profile/${userData?.username}`} passHref className={`items-center justify-between w-full relative flex px-4 py-2 ${theme === "dark" ? "hover:bg-[#252525]" : "hover:bg-[#DADADA]"}`}>
+                                        <Link href={`/${userData?.username}`} passHref className={`items-center justify-between w-full relative flex px-4 py-2 ${theme === "dark" ? "hover:bg-[#252525]" : "hover:bg-[#DADADA]"}`}>
                                             <svg className="w-4 mr-3" viewBox="0 0 23 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path className='ostroke' d="M1 31C1 31 1.70315 20.1955 11.485 20.1955C21.2668 20.1955 22.3535 31 22.3535 31M19.1432 7.85658C19.1432 11.6434 16.0734 14.7132 12.2866 14.7132C8.49986 14.7132 5.43006 11.6434 5.43006 7.85658C5.43006 4.06979 8.49986 1 12.2866 1C16.0734 1 19.1432 4.06979 19.1432 7.85658Z" stroke="white" strokeWidth={2} stroke-miterlimit="10"/>
                                             </svg>

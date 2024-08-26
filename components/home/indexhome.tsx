@@ -130,7 +130,7 @@ interface IndexHomePageProps {
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
-                    <Link href={`/profile/${userData?.username}`} passHref>
+                    <Link href={`/${userData?.username}`} passHref>
                         <div className="flex items-center w-full h-10 "> 
                             <div className="w-8 h-6 bg-slate-300 rounded-full justify-center flex items-center">
 
@@ -254,7 +254,7 @@ interface IndexHomePageProps {
                 </div>
 
                 <div className="Pages-Sidebar block relative font-semibold ml-2 hover:text-[#FF3B5C]">
-                    <Link href={`/profile/${userData?.username}`} passHref>
+                    <Link href={`/${userData?.username}`} passHref>
                         <div className="flex items-center w-full h-10 "> 
                             <div className="w-8 h-8 bg-slate-300 rounded-full justify-center flex items-center">
 
