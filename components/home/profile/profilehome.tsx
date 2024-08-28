@@ -85,12 +85,16 @@ const ProfilePageCom: React.FC = () => {
     }, []);
 
     useEffect(() => {
-    const unsubscribe = onauthoriginal(firebaseAuth, async (authUser) => {
-        if (authUser) {
+        const unsubscribe = onauthoriginal(firebaseAuth, async (authUser) => {
+            if (!authUser) {
+                // Redirect to login page if the user is not logged in
+                window.location.href = '/login';
+                return;
+            }
+
             setCurrentUser(authUser);
             setUid(authUser.uid);
 
-            // Periksa apakah UID dari sesi saat ini cocok dengan UID dari URL
             const pathSegment = window.location.pathname.split('/').pop();
             if (pathSegment && pathSegment.length >= 28) {
                 // Jika pathSegment adalah UID, bandingkan dengan UID sesi
@@ -110,13 +114,12 @@ const ProfilePageCom: React.FC = () => {
                     setCanEditProfile(false);
                 }
             }
-        } else {
-            setCanEditProfile(false);
-        }
-    });
 
-    return () => unsubscribe(); // Cleanup on unmount
-}, [username]);
+            setLoading(false);
+        });
+
+        return () => unsubscribe(); // Cleanup on unmount
+    }, [username]);
 
     const openEditProfile = () => {
         setIsEditProfileOpen(true);
