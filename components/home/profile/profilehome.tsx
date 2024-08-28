@@ -1,131 +1,165 @@
 "use client"
-import next from "next";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import HeaderHome from "@/components/home/headerhome";
 import FooterMobileHome from "@/components/Mobile/footerhome";
-import { getUserData, onAuthStateChanged} from '../../../libs/firebase/auth';
+import { getUserData, onAuthStateChanged } from '../../../libs/firebase/auth';
 import EditProfileCom from "./editprofile";
 import { onAuthStateChanged as onauthoriginal, User } from 'firebase/auth';
-import { firebaseAuth, firebaseFirestore  } from '@/libs/firebase/config';
+import { firebaseAuth, firebaseFirestore } from '@/libs/firebase/config';
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
-
+import Alert from '@/src/alert';
 import ClipLoader from 'react-spinners/ClipLoader';
 
+const ProfilePageCom: React.FC = () => {
+    const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+    const [currentUsername, setCurrentUser] = useState<User | null>(null);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [username, setUsername] = useState<string | null>(null);
+    const [uid, setUid] = useState<string | null>(null);
+    const [name, setName] = useState<string | null>(null);
+    const [bio, setBio] = useState<string | null>(null);
+    const [followingCount, setFollowingCount] = useState<number>(0);
+    const [followersCount, setFollowersCount] = useState<number>(0);
+    const [likesCount, setLikesCount] = useState<number>(0);
+    const [canEditProfile, setCanEditProfile] = useState(false); // Menyimpan status apakah tombol edit dapat ditampilkan
+    const [loading, setLoading] = useState(true);
 
-const ProfilePageCom: React.FC = () =>{
-    useEffect(() => {
-        const fetchUserData = async () => {
-          try {
-            const pathSegment = window.location.pathname.split('/').pop();
-            let uidToUse = pathSegment;
-    
-            if (!uidToUse) {
-              throw new Error('UID atau username tidak ditemukan dalam URL.');
-            }
-    
-            let userDocRef;
-    
-            // Periksa apakah `uidToUse` adalah `uid` atau `username`
-            if (uidToUse.length < 28) { // Jika lebih pendek dari UID Firebase yang biasanya 28 karakter
-              const usersRef = collection(firebaseFirestore, "users");
-              const q = query(usersRef, where("username", "==", uidToUse));
-              const querySnapshot = await getDocs(q);
-    
-              if (!querySnapshot.empty) {
-                uidToUse = querySnapshot.docs[0].id; // Ambil UID dari hasil pencarian username
-              } else {
-                throw new Error('User tidak ditemukan dengan username tersebut.');
-              }
-            }
-    
-            // Dapatkan dokumen pengguna berdasarkan UID
-            userDocRef = doc(firebaseFirestore, "users", uidToUse);
-            const userDoc = await getDoc(userDocRef);
-    
-            if (userDoc.exists()) {
-              const data = userDoc.data();
-              setUsername(data?.username || 'user');
-              setName(data?.name || '');
-              setBio(data?.bio || '');
-              setFollowingCount(data?.following?.length || 0);
-              setFollowersCount(data?.followers?.length || 0);
-              setLikesCount(data?.likes?.length || 0);
-            } else {
-              throw new Error('User tidak ditemukan.');
-            }
-          } catch (error) {
-            console.error("Error fetching user data: ", error);
-          } finally {
-            setLoading(false);
-          }
-        };
-    
-        fetchUserData();
-      }, []);
-
-      const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
-      const [currentUsername, setCurrentUser] = useState<User | null>(null);
-      const [showSuccess, setShowSuccess] = useState(false);
-  
-      useEffect(() => {
-          const unsubscribe = onauthoriginal(firebaseAuth, (authUser) => {
-              setCurrentUser(authUser);
-          });
-  
-          return () => unsubscribe(); // Cleanup on unmount
-      }, []);
-  
-      const openEditProfile = () => {
-          setIsEditProfileOpen(true);
-      };
-  
-      const closeEditProfile = () => {
-          setIsEditProfileOpen(false);
-      };
-  
-      const handleUsernameUpdated = () => {
-          setShowSuccess(true);
-          setTimeout(() => {
-              setShowSuccess(false);
-          }, 2000); // Hide the success message after 2 seconds
-      };
-
-    // underline Main konten
-    const [underlineStyle, setUnderlineStyle] = useState({});
-    const [selectedButton, setSelectedButton] = useState("videos"); // State untuk melacak tombol yang dipilih
     const videoButtonRef = useRef<HTMLButtonElement>(null);
     const favoritesButtonRef = useRef<HTMLButtonElement>(null);
     const likesButtonRef = useRef<HTMLButtonElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [loading, setLoading] = useState(true);
+
+    const [underlineStyle, setUnderlineStyle] = useState({});
+    const [selectedButton, setSelectedButton] = useState("videos"); // State untuk melacak tombol yang dipilih
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const pathSegment = window.location.pathname.split('/').pop();
+                let uidToUse = pathSegment;
+
+                if (!uidToUse) {
+                    throw new Error('UID atau username tidak ditemukan dalam URL.');
+                }
+
+                let userDocRef;
+
+                // Periksa apakah `uidToUse` adalah `uid` atau `username`
+                if (uidToUse.length < 28) { // Jika lebih pendek dari UID Firebase yang biasanya 28 karakter
+                    const usersRef = collection(firebaseFirestore, "users");
+                    const q = query(usersRef, where("username", "==", uidToUse));
+                    const querySnapshot = await getDocs(q);
+
+                    if (!querySnapshot.empty) {
+                        uidToUse = querySnapshot.docs[0].id; // Ambil UID dari hasil pencarian username
+                    } else {
+                        throw new Error('User tidak ditemukan dengan username tersebut.');
+                    }
+                }
+
+                // Dapatkan dokumen pengguna berdasarkan UID
+                userDocRef = doc(firebaseFirestore, "users", uidToUse);
+                const userDoc = await getDoc(userDocRef);
+
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    setUsername(data?.username || 'user');
+                    setName(data?.name || '');
+                    setBio(data?.bio || '');
+                    setFollowingCount(data?.following?.length || 0);
+                    setFollowersCount(data?.followers?.length || 0);
+                    setLikesCount(data?.likes?.length || 0);
+                } else {
+                    throw new Error('User tidak ditemukan.');
+                }
+            } catch (error) {
+                console.error("Error fetching user data: ", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
+    useEffect(() => {
+        const unsubscribe = onauthoriginal(firebaseAuth, async (authUser) => {
+            if (authUser) {
+                setCurrentUser(authUser);
+                setUid(authUser.uid);
+    
+                // Periksa apakah UID dari sesi saat ini cocok dengan UID dari URL
+                const pathSegment = window.location.pathname.split('/').pop();
+                if (pathSegment && pathSegment.length >= 28) {
+                    // Jika pathSegment adalah UID, bandingkan dengan UID sesi
+                    if (pathSegment === authUser.uid) {
+                        setCanEditProfile(true);
+                    } else {
+                        setCanEditProfile(false);
+                    }
+                } else {
+                    // Jika pathSegment adalah username
+                    const usersRef = collection(firebaseFirestore, "users");
+                    const q = query(usersRef, where("username", "==", pathSegment));
+                    const querySnapshot = await getDocs(q);
+                    if (!querySnapshot.empty && querySnapshot.docs[0].id === authUser.uid) {
+                        setCanEditProfile(true);
+                    } else {
+                        setCanEditProfile(false);
+                    }
+                }
+            } else {
+                setCanEditProfile(false);
+            }
+        });
+    
+        return () => unsubscribe(); // Cleanup on unmount
+    }, [username]);
+
+    const openEditProfile = () => {
+        setIsEditProfileOpen(true);
+    };
+
+    const closeEditProfile = () => {
+        setIsEditProfileOpen(false);
+    };
+
+    const handleUsernameUpdated = () => {
+        setShowSuccess(true);
+        setTimeout(() => {
+            setShowSuccess(false);
+            // Redirect to home after successful update
+            window.location.href = '/home';
+        }, 2000); // Hide the success message and redirect after 2 seconds
+    };
 
     const updateUnderline = (buttonRef: React.RefObject<HTMLButtonElement>, transition: string) => {
         if (buttonRef.current) {
-          const rect = buttonRef.current.getBoundingClientRect();
-          setUnderlineStyle({
-            width: `${rect.width}px`,
-            transform: `translateX(${rect.left - buttonRef.current.parentElement!.getBoundingClientRect().left}px)`,
-            transition: transition
-          });
+            const rect = buttonRef.current.getBoundingClientRect();
+            setUnderlineStyle({
+                width: `${rect.width}px`,
+                transform: `translateX(${rect.left - buttonRef.current.parentElement!.getBoundingClientRect().left}px)`,
+                transition: transition
+            });
         }
-      };
+    };
 
     useEffect(() => {
         // Update underline position on initial render based on selected button
         switch (selectedButton) {
-        case "videos":
-            updateUnderline(videoButtonRef, "none"); // No transition for initial render
-            break;
-        case "favorites":
-            updateUnderline(favoritesButtonRef, "none"); // No transition for initial render
-            break;
-        case "likes":
-            updateUnderline(likesButtonRef, "none"); // No transition for initial render
-            break;
-        default:
-            break;
+            case "videos":
+                updateUnderline(videoButtonRef, "none"); // No transition for initial render
+                break;
+            case "favorites":
+                updateUnderline(favoritesButtonRef, "none"); // No transition for initial render
+                break;
+            case "likes":
+                updateUnderline(likesButtonRef, "none"); // No transition for initial render
+                break;
+            default:
+                break;
         }
     }, [selectedButton]);
 
@@ -134,27 +168,10 @@ const ProfilePageCom: React.FC = () =>{
         const button = e.currentTarget;
         const rect = button.getBoundingClientRect();
         setUnderlineStyle({
-        width: `${rect.width}px`,
-        transform: `translateX(${rect.left - button.parentElement!.getBoundingClientRect().left}px)`,
-        transition: 'transform 0.3s ease, width 0.3s ease'
+            width: `${rect.width}px`,
+            transform: `translateX(${rect.left - button.parentElement!.getBoundingClientRect().left}px)`,
+            transition: 'transform 0.3s ease, width 0.3s ease'
         });
-    };
-
-    const handleMouseLeave = () => {
-        // Kembalikan garis bawah ke tombol yang dipilih saat ini
-        switch (selectedButton) {
-        case "videos":
-            updateUnderline(videoButtonRef, "transform 0.3s ease, width 0.3s ease");
-            break;
-        case "favorites":
-            updateUnderline(favoritesButtonRef, "transform 0.3s ease, width 0.3s ease");
-            break;
-        case "likes":
-            updateUnderline(likesButtonRef, "transform 0.3s ease, width 0.3s ease");
-            break;
-        default:
-            break;
-        }
     };
 
     const handleButtonClick = (buttonName: string) => () => {
@@ -175,50 +192,35 @@ const ProfilePageCom: React.FC = () =>{
         }
     };
 
+    const handleMouseLeave = () => {
+        // Kembalikan garis bawah ke tombol yang dipilih saat ini
+        switch (selectedButton) {
+            case "videos":
+                updateUnderline(videoButtonRef, "transform 0.3s ease, width 0.3s ease");
+                break;
+            case "favorites":
+                updateUnderline(favoritesButtonRef, "transform 0.3s ease, width 0.3s ease");
+                break;
+            case "likes":
+                updateUnderline(likesButtonRef, "transform 0.3s ease, width 0.3s ease");
+                break;
+            default:
+                break;
+        }
+    };
+
     useEffect(() => {
         // Add event listener to handle mouse leave on container
         const handleContainerMouseLeave = (e: MouseEvent) => {
-        if (!containerRef.current?.contains(e.target as Node)) {
-            handleMouseLeave();
-        }
+            if (!containerRef.current?.contains(e.target as Node)) {
+                handleMouseLeave();
+            }
         };
 
         document.addEventListener("mouseup", handleContainerMouseLeave);
         return () => {
-        document.removeEventListener("mouseup", handleContainerMouseLeave);
+            document.removeEventListener("mouseup", handleContainerMouseLeave);
         };
-    }, );
-
-    //   Database
-    const [username, setUsername] = useState<string | null>(null);
-    const [uid, setUid] = useState<string | null>(null);
-    const [name, setName] = useState<string | null>(null);
-    const [bio, setBio] = useState<string | null>(null);
-    const [followingCount, setFollowingCount] = useState<number>(0);
-    const [followersCount, setFollowersCount] = useState<number>(0);
-    const [likesCount, setLikesCount] = useState<number>(0);
-
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged( async (user) => {
-            if (!user) {
-                // Redirect to home if the user is not logged in
-                window.location.href = '/login';
-            } else {
-                setUid(user.uid);
-                const userData = await getUserData(user.uid);
-                if (userData) {
-                    setUsername(userData.username);
-                    setName(userData.name);
-                    setBio(userData.bio);
-                    setFollowingCount(userData.following?.length || 0);
-                    setFollowersCount(userData.followers?.length || 0);
-                    setLikesCount(userData.likes?.length || 0);
-                }
-            }
-            setLoading(false);
-        });
-
-        return () => unsubscribe();
     }, []);
 
     if (loading) {
@@ -232,9 +234,16 @@ const ProfilePageCom: React.FC = () =>{
         );
     }
 
-    return(
+    return (
         
         <main>
+            {showSuccess && (
+                <Alert
+                    type="success"
+                    message="Username berhasil diubah."
+                    onClose={() => setShowSuccess(false)}
+                />
+            )}
             <div className=" hidden md:flex md:flex-col">
                 <HeaderHome />
             </div>
@@ -537,12 +546,14 @@ const ProfilePageCom: React.FC = () =>{
 
                             <div className="w-full flex text-sm mt-3">
                                 <div>
-                                <button
-                                    className="bg-[#FF3B5C] w-28 p-3 rounded-lg mr-3"
-                                    onClick={openEditProfile}
-                                >
-                                    <h2 className="text-white">Edit Profile</h2>
-                                </button>
+                                {canEditProfile && (
+                                    <button
+                                        className="bg-[#FF3B5C] w-28 p-3 rounded-lg mr-3"
+                                        onClick={openEditProfile}
+                                    >
+                                        <h2 className="text-white">Edit Profile</h2>
+                                    </button>
+                                )}
 
                                 {isEditProfileOpen && currentUsername?.uid &&(
                                     <EditProfileCom close={closeEditProfile} uid={currentUsername.uid} currentUsername={currentUsername.displayName || ''} onUsernameUpdated={handleUsernameUpdated}/>
