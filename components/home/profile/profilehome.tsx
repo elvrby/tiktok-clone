@@ -85,33 +85,38 @@ const ProfilePageCom: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        const unsubscribe = onauthoriginal(firebaseAuth, async (authUser) => {
-            if (!authUser) {
-                // Redirect to login page if the user is not logged in
-                window.location.href = '/login';
-            } else {
-                setCurrentUser(authUser);
-                setUid(authUser.uid);
+    const unsubscribe = onauthoriginal(firebaseAuth, async (authUser) => {
+        if (authUser) {
+            setCurrentUser(authUser);
+            setUid(authUser.uid);
 
-                // Periksa apakah UID dari sesi saat ini cocok dengan UID dari URL
-                if (uid && uid === authUser.uid) {
+            // Periksa apakah UID dari sesi saat ini cocok dengan UID dari URL
+            const pathSegment = window.location.pathname.split('/').pop();
+            if (pathSegment && pathSegment.length >= 28) {
+                // Jika pathSegment adalah UID, bandingkan dengan UID sesi
+                if (pathSegment === authUser.uid) {
                     setCanEditProfile(true);
                 } else {
-                    const usersRef = collection(firebaseFirestore, "users");
-                    const q = query(usersRef, where("username", "==", username));
-                    const querySnapshot = await getDocs(q);
-                    if (!querySnapshot.empty && querySnapshot.docs[0].id === authUser.uid) {
-                        setCanEditProfile(true);
-                    } else {
-                        setCanEditProfile(false);
-                    }
+                    setCanEditProfile(false);
+                }
+            } else {
+                // Jika pathSegment adalah username
+                const usersRef = collection(firebaseFirestore, "users");
+                const q = query(usersRef, where("username", "==", pathSegment));
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty && querySnapshot.docs[0].id === authUser.uid) {
+                    setCanEditProfile(true);
+                } else {
+                    setCanEditProfile(false);
                 }
             }
-            setLoading(false);
-        });
+        } else {
+            setCanEditProfile(false);
+        }
+    });
 
-        return () => unsubscribe(); // Cleanup on unmount
-    }, [uid, username]);
+    return () => unsubscribe(); // Cleanup on unmount
+}, [username]);
 
     const openEditProfile = () => {
         setIsEditProfileOpen(true);
