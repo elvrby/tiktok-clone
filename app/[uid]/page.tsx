@@ -5,6 +5,7 @@ import { firebaseFirestore } from '@/libs/firebase/config'; // Ganti dengan path
 import { doc, getDoc, query, collection, where, getDocs } from 'firebase/firestore';
 import { useRouter } from 'next/navigation'; // Import useRouter
 import ProfilePageCom from '@/components/home/profile/profilehome';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 const UserProfilePage: React.FC = () => {
   const [username, setUsername] = useState<string | null>(null);
@@ -57,8 +58,15 @@ const UserProfilePage: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <main><h2 className="text-white">Loading...</h2></main>;
-  }
+    return (
+        <div className="flex justify-center items-center h-screen bg-black z-100000000000000000">
+            <div className="text-center">
+                <ClipLoader color="white" loading={loading} size={30} /> {/* Loading spinner */}
+                <h2 className="text-white mt-4">Tunggu Sebentar...</h2>
+            </div>
+        </div>
+    );
+}
 
   return (
     <main>

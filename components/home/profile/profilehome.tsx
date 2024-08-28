@@ -86,23 +86,19 @@ const ProfilePageCom: React.FC = () => {
 
     useEffect(() => {
         const unsubscribe = onauthoriginal(firebaseAuth, async (authUser) => {
-            if (authUser) {
+            if (!authUser) {
+                // Redirect to login page if the user is not logged in
+                window.location.href = '/login';
+            } else {
                 setCurrentUser(authUser);
                 setUid(authUser.uid);
-    
+
                 // Periksa apakah UID dari sesi saat ini cocok dengan UID dari URL
-                const pathSegment = window.location.pathname.split('/').pop();
-                if (pathSegment && pathSegment.length >= 28) {
-                    // Jika pathSegment adalah UID, bandingkan dengan UID sesi
-                    if (pathSegment === authUser.uid) {
-                        setCanEditProfile(true);
-                    } else {
-                        setCanEditProfile(false);
-                    }
+                if (uid && uid === authUser.uid) {
+                    setCanEditProfile(true);
                 } else {
-                    // Jika pathSegment adalah username
                     const usersRef = collection(firebaseFirestore, "users");
-                    const q = query(usersRef, where("username", "==", pathSegment));
+                    const q = query(usersRef, where("username", "==", username));
                     const querySnapshot = await getDocs(q);
                     if (!querySnapshot.empty && querySnapshot.docs[0].id === authUser.uid) {
                         setCanEditProfile(true);
@@ -110,13 +106,12 @@ const ProfilePageCom: React.FC = () => {
                         setCanEditProfile(false);
                     }
                 }
-            } else {
-                setCanEditProfile(false);
             }
+            setLoading(false);
         });
-    
+
         return () => unsubscribe(); // Cleanup on unmount
-    }, [username]);
+    }, [uid, username]);
 
     const openEditProfile = () => {
         setIsEditProfileOpen(true);
