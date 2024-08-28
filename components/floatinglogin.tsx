@@ -16,9 +16,16 @@ import { createSession, removeSession } from '@/actions/auth-actions';
     const userSessionId = useUserSession(session);
   
     const handleSignIn = async () => {
-      const userUid = await signInWithGoogle();
-      if (userUid) {
-        await createSession(userUid);
+      try {
+        const userUid = await signInWithGoogle();
+        if (userUid) {
+          await createSession(userUid);
+          console.log('User signed in with UID:', userUid);
+          close(); // Tutup komponen setelah login berhasil
+        }
+      } catch (error) {
+        console.error('Error during sign-in:', error);
+        alert('Failed to sign in. Please try again.');
       }
     };
   

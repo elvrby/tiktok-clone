@@ -7,19 +7,90 @@ import HeaderHome from "@/components/home/headerhome";
 import FooterMobileHome from "@/components/Mobile/footerhome";
 import { getUserData, onAuthStateChanged} from '../../../libs/firebase/auth';
 import EditProfileCom from "./editprofile";
+import { onAuthStateChanged as onauthoriginal, User } from 'firebase/auth';
+import { firebaseAuth, firebaseFirestore  } from '@/libs/firebase/config';
+import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
+
 import ClipLoader from 'react-spinners/ClipLoader';
 
 
 const ProfilePageCom: React.FC = () =>{
-    const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+    useEffect(() => {
+        const fetchUserData = async () => {
+          try {
+            const pathSegment = window.location.pathname.split('/').pop();
+            let uidToUse = pathSegment;
+    
+            if (!uidToUse) {
+              throw new Error('UID atau username tidak ditemukan dalam URL.');
+            }
+    
+            let userDocRef;
+    
+            // Periksa apakah `uidToUse` adalah `uid` atau `username`
+            if (uidToUse.length < 28) { // Jika lebih pendek dari UID Firebase yang biasanya 28 karakter
+              const usersRef = collection(firebaseFirestore, "users");
+              const q = query(usersRef, where("username", "==", uidToUse));
+              const querySnapshot = await getDocs(q);
+    
+              if (!querySnapshot.empty) {
+                uidToUse = querySnapshot.docs[0].id; // Ambil UID dari hasil pencarian username
+              } else {
+                throw new Error('User tidak ditemukan dengan username tersebut.');
+              }
+            }
+    
+            // Dapatkan dokumen pengguna berdasarkan UID
+            userDocRef = doc(firebaseFirestore, "users", uidToUse);
+            const userDoc = await getDoc(userDocRef);
+    
+            if (userDoc.exists()) {
+              const data = userDoc.data();
+              setUsername(data?.username || 'user');
+              setName(data?.name || '');
+              setBio(data?.bio || '');
+              setFollowingCount(data?.following?.length || 0);
+              setFollowersCount(data?.followers?.length || 0);
+              setLikesCount(data?.likes?.length || 0);
+            } else {
+              throw new Error('User tidak ditemukan.');
+            }
+          } catch (error) {
+            console.error("Error fetching user data: ", error);
+          } finally {
+            setLoading(false);
+          }
+        };
+    
+        fetchUserData();
+      }, []);
 
-    const openEditProfile = () => {
-        setIsEditProfileOpen(true);
-    };
-
-    const closeEditProfile = () => {
-        setIsEditProfileOpen(false);
-    };
+      const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+      const [currentUsername, setCurrentUser] = useState<User | null>(null);
+      const [showSuccess, setShowSuccess] = useState(false);
+  
+      useEffect(() => {
+          const unsubscribe = onauthoriginal(firebaseAuth, (authUser) => {
+              setCurrentUser(authUser);
+          });
+  
+          return () => unsubscribe(); // Cleanup on unmount
+      }, []);
+  
+      const openEditProfile = () => {
+          setIsEditProfileOpen(true);
+      };
+  
+      const closeEditProfile = () => {
+          setIsEditProfileOpen(false);
+      };
+  
+      const handleUsernameUpdated = () => {
+          setShowSuccess(true);
+          setTimeout(() => {
+              setShowSuccess(false);
+          }, 2000); // Hide the success message after 2 seconds
+      };
 
     // underline Main konten
     const [underlineStyle, setUnderlineStyle] = useState({});
@@ -473,8 +544,8 @@ const ProfilePageCom: React.FC = () =>{
                                     <h2 className="text-white">Edit Profile</h2>
                                 </button>
 
-                                {isEditProfileOpen && (
-                                    <EditProfileCom close={closeEditProfile} />
+                                {isEditProfileOpen && currentUsername?.uid &&(
+                                    <EditProfileCom close={closeEditProfile} uid={currentUsername.uid} currentUsername={currentUsername.displayName || ''} onUsernameUpdated={handleUsernameUpdated}/>
                                 )}
                                 </div>
                                 <button className="bg-[#1E1E1E] w-11  p-3 rounded-lg mr-3">

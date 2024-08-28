@@ -31,18 +31,32 @@ export async function signInWithGoogle() {
     const user = result.user;
     const uid = user.uid;
     const email = user.email || 'No email';
-    const username = user.displayName || 'No username';
-    const name = generateRandomName();
+
+    // Generate a random username if displayName is not available
+    const username = user.displayName || generateRandomName();
 
     const userDocRef = doc(firebaseFirestore, 'users', uid);
     const userDoc = await getDoc(userDocRef);
 
     if (!userDoc.exists()) {
+      // Ensure the username is unique
+      let uniqueUsername = username;
+      const usersCollection = collection(firebaseFirestore, 'users');
+      const usernameQuery = query(usersCollection, where('username', '==', uniqueUsername));
+      const usernameSnapshot = await getDocs(usernameQuery);
+
+      while (!usernameSnapshot.empty) {
+        uniqueUsername = generateRandomName();
+        const newUsernameQuery = query(usersCollection, where('username', '==', uniqueUsername));
+        const newUsernameSnapshot = await getDocs(newUsernameQuery);
+        if (newUsernameSnapshot.empty) break;
+      }
+
       // Save user data to 'users' collection in Firestore with roles set to null
       await setDoc(userDocRef, {
         email,
-        name,
-        username,
+        name: uniqueUsername,
+        username: uniqueUsername,
         uid,
         roles: null, // Set roles to null initially
         bio: 'your bio goes here', // Default bio
@@ -58,8 +72,10 @@ export async function signInWithGoogle() {
     return uid;
   } catch (error) {
     console.error('Error signing in with Google', error);
+    throw error; // Re-throw the error for handling upstream
   }
 }
+
 
 export async function signOutWithGoogle() {
   try {
@@ -112,7 +128,3 @@ export async function getUserData(identifier: string) {
     return null;
   }
 }
-
-
-
-

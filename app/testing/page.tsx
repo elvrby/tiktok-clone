@@ -1,23 +1,44 @@
-"use client"
-import EditProfileCom from "@/components/home/profile/editprofile";
-import React, { useState } from "react";
+"use client";
+
+import { useEffect, useState } from 'react';
+import { firebaseAuth, firebaseFirestore } from '@/libs/firebase/config'; // Ganti dengan path yang sesuai
+import { doc, getDoc } from 'firebase/firestore';
 
 const PageTesting: React.FC = () => {
-  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+  const [username, setUsername] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const user = firebaseAuth.currentUser;
+        if (user) {
+          const uid = user.uid;
+          const userDocRef = doc(firebaseFirestore, 'users', uid);
+          const userDoc = await getDoc(userDocRef);
 
-  const openEditProfile = () => {
-      setIsEditProfileOpen(true);
-  };
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            setUsername(data?.username || 'user'); // Ganti 'user' dengan nilai default jika username tidak ada
+          } else {
+            console.error('No such user!');
+            setUsername('user');
+          }
+        } else {
+          console.error('No authenticated user');
+          setUsername('user');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        setUsername('user');
+      }
+    };
 
-  const closeEditProfile = () => {
-      setIsEditProfileOpen(false);
-  };
+    fetchUserData();
+  }, []);
 
   return (
     <main>
-      {isEditProfileOpen && (
-        <EditProfileCom close={closeEditProfile} />
-      )}
+      <h2 className="text-white">{username}</h2>
     </main>
   );
 };

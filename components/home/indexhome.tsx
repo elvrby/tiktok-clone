@@ -6,7 +6,7 @@ import { useUserSession } from '@/hooks/use-user-session';
 import { signInWithGoogle, signOutWithGoogle,getUserData } from '@/libs/firebase/auth';
 import { createSession, removeSession } from '@/actions/auth-actions';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { firebaseAuth, firebaseFirestore } from '../../libs/firebase/config';
+import { firebaseAuth } from '../../libs/firebase/config';
 
 
 interface IndexHomePageProps {
