@@ -10,23 +10,28 @@ interface EditProfileProps {
   uid: string;
   currentUsername: string;
   currentName: string;
+  currentBio: string;
   onUsernameUpdated: () => void;
   onNameUpdated: () => void;
+  onBioUpdated: () => void;
 }
 
-const EditProfileCom: React.FC<EditProfileProps> = ({ close, uid, currentUsername, onUsernameUpdated, onNameUpdated }) => {
+const EditProfileCom: React.FC<EditProfileProps> = ({ close, uid, currentUsername, onUsernameUpdated, onNameUpdated, onBioUpdated }) => {
     const [newUsername, setNewUsername] = useState('');
     const [newName, setNewName] = useState('');
+    const [newBio, setNewBio] = useState('');
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const maxChars = 80;
     const router = useRouter();
 
     // Handlesave Username
     const handleSave = async () => {
         let tempUsername: string | null = newUsername?.trim() || null;
         let tempName: string | null = newName?.trim() || null;
+        let tempBio: string | null = newBio?.trim() || null;
     
-        if (!tempUsername && !tempName) {
+        if (!tempUsername && !tempName && !tempBio) {
             alert('Tidak ada perubahan yang dilakukan');
             return;
         }
@@ -42,6 +47,7 @@ const EditProfileCom: React.FC<EditProfileProps> = ({ close, uid, currentUsernam
             const userDocSnap = await getDoc(userDocRef);
             const currentUsername = userDocSnap.data()?.username;
             const currentName = userDocSnap.data()?.name;
+            const currentBio = userDocSnap.data()?.bio;
     
             // Check if the new username is the same as the current one
             if (tempUsername && tempUsername === currentUsername) {
@@ -92,6 +98,21 @@ const EditProfileCom: React.FC<EditProfileProps> = ({ close, uid, currentUsernam
     
                 updates['name'] = tempName;
             }
+
+            if (tempBio) {
+                const usersRef = collection(firebaseFirestore, 'users');
+                const qBio = query(usersRef, where('bio', '==', tempBio));
+                const querySnapshotBio = await getDocs(qBio);
+    
+                if (!querySnapshotBio.empty && querySnapshotBio.docs[0].id !== uid) {
+                    setAlertMessage("Nama telah digunakan");
+                    setShowAlert(true);
+                    setTimeout(() => setShowAlert(false), 2000);
+                    return;
+                }
+    
+                updates['bio'] = tempBio;
+            }
     
             // Update if there are changes
             if (Object.keys(updates).length > 0) {
@@ -110,6 +131,17 @@ const EditProfileCom: React.FC<EditProfileProps> = ({ close, uid, currentUsernam
     
                 if (tempName) {
                     onNameUpdated(); // Call callback after name update
+                    close();
+    
+                    // Refresh the page after name is updated
+                    setTimeout(() => {
+                        setShowAlert(false);
+                        window.location.reload(); // This refreshes the current page
+                    }, 2000);
+                }
+
+                if (tempBio) {
+                    onBioUpdated(); // Call callback after name update
                     close();
     
                     // Refresh the page after name is updated
@@ -169,6 +201,16 @@ const EditProfileCom: React.FC<EditProfileProps> = ({ close, uid, currentUsernam
             }, 2000);
         }
     };
+    const handleBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const value = e.target.value;
+        if (value.length <= maxChars) {
+            setNewBio(value);
+        }
+    };
+
+    // Hitung sisa karakter
+    const charCount = newBio.length;
+    
       
       
       
@@ -233,9 +275,12 @@ const EditProfileCom: React.FC<EditProfileProps> = ({ close, uid, currentUsernam
                 <div className="p-5 pl-8 text-base flex border-b border-[#4A4A4A]">
                     <h1 className="w-32">Bio</h1>
                     <div className="w-full items-center justify-center flex flex-col pr-28 pl-10">
-                        <textarea className="bg-[#EAEAEA] w-full h-28 p-5 pt-2 pl-2 resize-none"/>
+                        <textarea className="bg-[#EAEAEA] w-full h-28 p-5 pt-2 pl-2 resize-none"
+                        value={newBio}
+                        onChange={handleBioChange}
+                        />
                         <div className="w-full items-start font-normal text-sm mt-1 flex flex-col">
-                            <span>0/80</span>
+                            <span>{charCount}/{maxChars}</span>
                         </div>
                     </div>
                 </div>

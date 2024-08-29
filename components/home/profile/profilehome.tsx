@@ -176,6 +176,16 @@ const ProfilePageCom: React.FC = () => {
             setShowAlert(false);
         }, 2000);
     };
+    const handleBioUpdated = () => {
+        setAlertMessage("Bio berhasil di ubah");
+            setShowAlert(true);
+    
+            // Sembunyikan alert setelah 2 detik
+            setTimeout(() => {
+            router.push('/home')
+            setShowAlert(false);
+        }, 2000);
+    };
 
     const updateUnderline = (buttonRef: React.RefObject<HTMLButtonElement>, transition: string) => {
         if (buttonRef.current) {
@@ -585,7 +595,7 @@ const ProfilePageCom: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="w-full flex text-[#DADADA] text-sm mt-2">
+                            <div className="w-96 flex text-[#DADADA] text-sm mt-2 text-start">
                                 <span>{bio ? bio : 'No bio yet'}</span>
                             </div>
 
@@ -605,7 +615,8 @@ const ProfilePageCom: React.FC = () => {
                                     uid={currentUsername.uid} 
                                     currentUsername={currentUsername.displayName || ''}
                                     currentName={currentUsername.displayName || ''}
-                                    onUsernameUpdated={handleUsernameUpdated} onNameUpdated={handleNameUpdated}/>
+                                    currentBio={currentUsername.displayName || ''}
+                                    onUsernameUpdated={handleUsernameUpdated} onNameUpdated={handleNameUpdated} onBioUpdated={handleBioUpdated}/>
                                 )}
                                 </div>
                                 <button className="bg-[#1E1E1E] w-11  p-3 rounded-lg mr-3">
