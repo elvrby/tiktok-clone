@@ -8,6 +8,7 @@ import {
 
 import { doc, collection, query, where, getDocs, getDoc, setDoc } from 'firebase/firestore';
 import { firebaseAuth, firebaseFirestore } from './config';
+import { signOut } from 'firebase/auth';
 
 export function onAuthStateChanged(callback: (authUser: User | null) => void) {
   return _onAuthStateChanged(firebaseAuth, callback);
@@ -77,13 +78,14 @@ export async function signInWithGoogle() {
 }
 
 
-export async function signOutWithGoogle() {
+export const signOutWithGoogle = async () => {
   try {
-    await firebaseAuth.signOut();
+      await signOut(firebaseAuth);
   } catch (error) {
-    console.error('Error signing out with Google', error);
+      console.error('Error signing out with Google:', error);
+      throw error; // Re-throw the error to handle it in the calling function
   }
-}
+};
 
 // Function to get user roles
 export async function getUserRoles(uid: string) {

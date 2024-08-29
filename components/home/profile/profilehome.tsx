@@ -4,13 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import HeaderHome from "@/components/home/headerhome";
 import FooterMobileHome from "@/components/Mobile/footerhome";
-import { getUserData, onAuthStateChanged } from '../../../libs/firebase/auth';
 import EditProfileCom from "./editprofile";
 import { onAuthStateChanged as onauthoriginal, User } from 'firebase/auth';
 import { firebaseAuth, firebaseFirestore } from '@/libs/firebase/config';
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
-import Alert from '@/src/alert';
+import AlertSukses from "@/src/alert-sukses";
 import ClipLoader from 'react-spinners/ClipLoader';
+import { useRouter } from 'next/navigation';
 
 const ProfilePageCom: React.FC = () => {
     const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
@@ -34,8 +34,12 @@ const ProfilePageCom: React.FC = () => {
     const [underlineStyle, setUnderlineStyle] = useState({});
     const [selectedButton, setSelectedButton] = useState("videos"); // State untuk melacak tombol yang dipilih
 
+    const router = useRouter();
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
     useEffect(() => {
-        const fetchUserData = async () => {
+        const fetchAndCheckUserData = async () => {
             try {
                 const pathSegment = window.location.pathname.split('/').pop();
                 let uidToUse = pathSegment;
@@ -47,13 +51,13 @@ const ProfilePageCom: React.FC = () => {
                 let userDocRef;
 
                 // Periksa apakah `uidToUse` adalah `uid` atau `username`
-                if (uidToUse.length < 28) { // Jika lebih pendek dari UID Firebase yang biasanya 28 karakter
+                if (uidToUse.length < 28) {
                     const usersRef = collection(firebaseFirestore, "users");
                     const q = query(usersRef, where("username", "==", uidToUse));
                     const querySnapshot = await getDocs(q);
 
                     if (!querySnapshot.empty) {
-                        uidToUse = querySnapshot.docs[0].id; // Ambil UID dari hasil pencarian username
+                        uidToUse = querySnapshot.docs[0].id;
                     } else {
                         throw new Error('User tidak ditemukan dengan username tersebut.');
                     }
@@ -74,6 +78,27 @@ const ProfilePageCom: React.FC = () => {
                 } else {
                     throw new Error('User tidak ditemukan.');
                 }
+
+                const unsubscribe = onauthoriginal(firebaseAuth, async (authUser) => {
+                    if (!authUser) {
+                        // Redirect to login page if the user is not logged in
+                        router.push('/login'); // Gunakan router.push daripada window.location.href
+                        return;
+                    }
+
+                    setCurrentUser(authUser);
+                    setUid(authUser.uid);
+
+                    if (uidToUse === authUser.uid) {
+                        setCanEditProfile(true);
+                    } else {
+                        setCanEditProfile(false);
+                    }
+
+                    setLoading(false);
+                });
+
+                return () => unsubscribe(); // Cleanup on unmount
             } catch (error) {
                 console.error("Error fetching user data: ", error);
             } finally {
@@ -81,14 +106,16 @@ const ProfilePageCom: React.FC = () => {
             }
         };
 
-        fetchUserData();
-    }, []);
+        fetchAndCheckUserData();
+    }, [router]);
+    
+    
 
     useEffect(() => {
         const unsubscribe = onauthoriginal(firebaseAuth, async (authUser) => {
             if (!authUser) {
                 // Redirect to login page if the user is not logged in
-                window.location.href = '/login';
+                router.push('/login'); // Gunakan router.push daripada window.location.href
                 return;
             }
 
@@ -119,7 +146,7 @@ const ProfilePageCom: React.FC = () => {
         });
 
         return () => unsubscribe(); // Cleanup on unmount
-    }, [username]);
+    }, [router]);
 
     const openEditProfile = () => {
         setIsEditProfileOpen(true);
@@ -130,12 +157,24 @@ const ProfilePageCom: React.FC = () => {
     };
 
     const handleUsernameUpdated = () => {
-        setShowSuccess(true);
-        setTimeout(() => {
-            setShowSuccess(false);
-            // Redirect to home after successful update
-            window.location.href = '/home';
-        }, 2000); // Hide the success message and redirect after 2 seconds
+        setAlertMessage("username berhasil di ubah");
+            setShowAlert(true);
+    
+            // Sembunyikan alert setelah 2 detik
+            setTimeout(() => {
+            router.push('/home')
+            setShowAlert(false);
+        }, 2000);
+    };
+    const handleNameUpdated = () => {
+        setAlertMessage("username berhasil di ubah");
+            setShowAlert(true);
+    
+            // Sembunyikan alert setelah 2 detik
+            setTimeout(() => {
+            router.push('/home')
+            setShowAlert(false);
+        }, 2000);
     };
 
     const updateUnderline = (buttonRef: React.RefObject<HTMLButtonElement>, transition: string) => {
@@ -239,15 +278,18 @@ const ProfilePageCom: React.FC = () => {
 
     return (
         
-        <main>
-            {showSuccess && (
-                <Alert
-                    type="success"
-                    message="Username berhasil diubah."
-                    onClose={() => setShowSuccess(false)}
-                />
-            )}
-            <div className=" hidden md:flex md:flex-col">
+        <main className="w-full items-center justify-center flex flex-col ">
+            <div className='relative top-0 w-96 items-center justify-center z-9999999999999999999999'>
+                {showAlert && (
+                    <AlertSukses
+                        type="sukses"
+                        message={alertMessage}
+                        onClose={() => setShowAlert(false)}
+                    />
+                )}
+            </div>
+            
+            <div className=" w-full hidden md:flex md:flex-col">
                 <HeaderHome />
             </div>
 
@@ -559,7 +601,11 @@ const ProfilePageCom: React.FC = () => {
                                 )}
 
                                 {isEditProfileOpen && currentUsername?.uid &&(
-                                    <EditProfileCom close={closeEditProfile} uid={currentUsername.uid} currentUsername={currentUsername.displayName || ''} onUsernameUpdated={handleUsernameUpdated}/>
+                                    <EditProfileCom close={closeEditProfile} 
+                                    uid={currentUsername.uid} 
+                                    currentUsername={currentUsername.displayName || ''}
+                                    currentName={currentUsername.displayName || ''}
+                                    onUsernameUpdated={handleUsernameUpdated} onNameUpdated={handleNameUpdated}/>
                                 )}
                                 </div>
                                 <button className="bg-[#1E1E1E] w-11  p-3 rounded-lg mr-3">

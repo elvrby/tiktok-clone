@@ -54,15 +54,17 @@ const HeaderHome: React.FC = () => {
 
     const handleSignOut = async () => {
         try {
-            await signOutWithGoogle(); // Sign out the user
-            await removeSession(); // Remove the session
-
-            window.location.href = '/'; // Redirect to the homepage after logout
+            await signOutWithGoogle();
+            await removeSession();
+    
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 100); // Pengalihan setelah 100ms untuk memastikan proses sebelumnya selesai
         } catch (error) {
             console.error('Error signing out:', error);
-            // Handle the error, show a message to the user, etc.
         }
     };
+    
 
     const [showThemeMenu, setShowThemeMenu] = useState(false);
 
@@ -90,7 +92,7 @@ const HeaderHome: React.FC = () => {
                             <path d="M132.361 40.3025C138.204 40.3025 142.941 35.5709 142.941 29.7349C142.941 23.8989 138.204 19.1667 132.361 19.1667H132.217C126.373 19.1667 121.636 23.8991 121.636 29.7349C121.636 35.5709 126.373 40.3025 132.217 40.3025H132.361ZM127.143 29.7349C127.143 26.8961 129.448 24.5966 132.29 24.5966C135.129 24.5966 137.434 26.8961 137.434 29.7349C137.434 32.5737 135.129 34.8746 132.29 34.8746C129.448 34.8741 127.143 32.5737 127.143 29.7349Z"/>
                         </svg>
                     </div>
-                    <div className="relative items-center w-1/4 lg:flex hidden md:flex md:w-96 xl:w-1/4">
+                    <div className="relative items-center w-1/4 lg:flex hidden md:flex md:w-96 xl:w-1/4 z-0">
                         <input
                             type="text"
                             placeholder="Search"

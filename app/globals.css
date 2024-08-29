@@ -115,9 +115,15 @@ body.light-theme .ostroke{
 body.light-theme .thover:hover{
   color: #FF3B5C;
 }
+body.light-theme .thover:hover{
+  color: #00ffaa;
+}
 
 
-
+/* Pallet Warna */
+body .hijau{
+  background: #01721f;
+}
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -135,3 +141,19 @@ body.light-theme .thover:hover{
     text-wrap: balance;
   }
 }
+
+@keyframes popup {
+  0% {
+    transform:  scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform:  scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-popup {
+  animation: popup 0.3s ease-out forwards;
+}
+

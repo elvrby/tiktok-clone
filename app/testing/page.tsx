@@ -1,46 +1,37 @@
-"use client";
+"use client"
+import React, { useState } from 'react';
+import AlertSukses from '@/src/alert-sukses';
 
-import { useEffect, useState } from 'react';
-import { firebaseAuth, firebaseFirestore } from '@/libs/firebase/config'; // Ganti dengan path yang sesuai
-import { doc, getDoc } from 'firebase/firestore';
+const Testing: React.FC = () => {
+    const [showAlert, setShowAlert] = useState(false);
 
-const PageTesting: React.FC = () => {
-  const [username, setUsername] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const user = firebaseAuth.currentUser;
-        if (user) {
-          const uid = user.uid;
-          const userDocRef = doc(firebaseFirestore, 'users', uid);
-          const userDoc = await getDoc(userDocRef);
-
-          if (userDoc.exists()) {
-            const data = userDoc.data();
-            setUsername(data?.username || 'user'); // Ganti 'user' dengan nilai default jika username tidak ada
-          } else {
-            console.error('No such user!');
-            setUsername('user');
-          }
-        } else {
-          console.error('No authenticated user');
-          setUsername('user');
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        setUsername('user');
-      }
+    const handleClick = () => {
+        setShowAlert(true);
+        setTimeout(() => {
+            setShowAlert(false);
+        }, 2000); // Alert will disappear after 2 seconds
     };
 
-    fetchUserData();
-  }, []);
-
-  return (
-    <main>
-      <h2 className="text-white">{username}</h2>
-    </main>
-  );
+    return (
+        <div className=''>
+            <button
+                onClick={handleClick}
+                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+                Show Success Alert
+            </button>
+            <div className='bg-green-500'>
+            {showAlert && (
+                <AlertSukses
+                    type="sukses"
+                    message="Berhasil"
+                    onClose={() => setShowAlert(false)}
+                />
+            )}
+            </div>
+            
+        </div>
+    );
 };
 
-export default PageTesting;
+export default Testing;
