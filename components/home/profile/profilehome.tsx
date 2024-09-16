@@ -38,6 +38,8 @@ const ProfilePageCom: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
+    const [userData, setUserData] = useState<any>(null);
+
     // Database
     useEffect(() => {
         const fetchAndCheckUserData = async () => {
@@ -147,6 +149,40 @@ const ProfilePageCom: React.FC = () => {
         });
 
         return () => unsubscribe(); // Cleanup on unmount
+    }, [router]);
+
+    useEffect(() => {
+        // Fungsi untuk mengambil data pengguna dari Firestore
+        const fetchUserData = async (userUid: string) => {
+            try {
+                const userDocRef = doc(firebaseFirestore, 'users', userUid);
+                const userDocSnap = await getDoc(userDocRef);
+
+                if (userDocSnap.exists()) {
+                    const userData = userDocSnap.data();
+                    setUserData(userData);
+                    setUsername(userData?.username || 'user');
+                } else {
+                    console.error("User not found");
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            } finally {
+                setLoading(false); // Sembunyikan spinner setelah data diambil
+            }
+        };
+
+        // Pantau status autentikasi
+        const unsubscribe = onauthoriginal(firebaseAuth, (user) => {
+            if (user) {
+                setUid(user.uid); // Set UID pengguna
+                fetchUserData(user.uid); // Ambil data pengguna dari Firestore
+            } else {
+                router.push('/login'); // Arahkan ke halaman login jika belum login
+            }
+        });
+
+        return () => unsubscribe(); // Bersihkan listener saat komponen di-unmount
     }, [router]);
 
     const openEditProfile = () => {
@@ -565,7 +601,19 @@ const ProfilePageCom: React.FC = () => {
                 <div className="w-full h-4/5 p-6 flex flex-col">
                     <div className="w-full h-full flex items-start">
                         <div className="w-60 h-60 bg-white rounded-full">
-                            <Image src={""} alt="" width={100} height={100}></Image>
+                                {loading ? (
+                        <ClipLoader size={50} /> // Tampilkan loading spinner jika masih mengambil data
+                        ) : userData ? (
+                            <>
+                                <img
+                                    src={userData.profileImage} // Menampilkan gambar profil dari Firestore
+                                    alt="Profile"
+                                    className="profile-image"
+                                />
+                            </>
+                        ) : (
+                            <p>Data user tidak ditemukan</p>
+                        )}
                         </div>
                         <div className="items-center flex flex-col ml-8 font-bold">
                             <div className="w-full flex items-center text-3xl">
