@@ -53,6 +53,9 @@ export async function signInWithGoogle() {
         if (newUsernameSnapshot.empty) break;
       }
 
+      // Set the default profile image URL from Firebase Storage
+      const defaultProfileImageUrl = 'https://firebasestorage.googleapis.com/v0/b/your-app-id.appspot.com/o/user.png?alt=media';
+
       // Save user data to 'users' collection in Firestore with roles set to null
       await setDoc(userDocRef, {
         email,
@@ -65,7 +68,7 @@ export async function signInWithGoogle() {
         followers: [], // Default empty array for followers
         likes: [], // Default likes count
         posts: [], // Default empty array for posts
-        profileImage: '', // Default empty string for profile image
+        profileImage: defaultProfileImageUrl, // Default empty string for profile image
         theme: 'dark', // Default theme
       });
     }
